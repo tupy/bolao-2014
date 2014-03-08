@@ -1,0 +1,26 @@
+
+.flag {
+  margin: 0 12px;
+}
+
+.table {
+  width: 300px;
+  margin: 0 auto;
+}
+
+.table > tbody > tr > td {
+  color: #999;
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+tr.date {
+  color: #999;
+  text-align: center;
+}
+
+.table > tbody > tr.date > td {
+  border: none;
+  padding-top: 0;
+  font-weight: normal;
+}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<table class="table"> 
+{% for game in games -%}
+  <tr>
+    <td class="text-right">{{game.team1.alias}}<img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team1.alias)}}" width="30" height="30" alt="{{game.team1}}" /></td>
+    <td> x </td>
+    <td><img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team2.alias)}}" width="30" height="30" alt="{{game.team2}}" />{{game.team2.alias}}</td>
+  </tr>
+  <tr class="date">
+    <td colspan="3"><small>{{game.time}}</small></td>
+  </tr>
+{% endfor %}
+</table>
+
+{% endblock %}
