@@ -36,7 +36,10 @@ class Scorer(db.Model):
 class Game(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   label = db.Column(db.String(50))
+  group = db.Column(db.String(1))
+  round = db.Column(db.Integer)
   time = db.Column(db.DateTime())
+  place = db.Column(db.String(50))
   team1_id = db.Column(db.Integer, db.ForeignKey('team.id'))
   team1 = db.relationship('Team', foreign_keys=team1_id)
   team2_id = db.Column(db.Integer, db.ForeignKey('team.id'))

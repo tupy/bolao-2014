@@ -11,8 +11,43 @@ class CreateDB(Command):
     """
 
     def run(self):
+        drop_all()
         create_all()
+        self.populate()
 
+    def populate(self):
+
+      import json
+      import datetime
+
+      from bolao.database import db
+      from bolao.models import Game, Team 
+      
+      def find_team(name, alias):
+        team = Team.query.filter_by(alias=alias).first()
+        if not team:
+           team = Team(name=name, alias=alias)
+           db.session.add(team)
+        return team
+      
+      data = open('games.json')
+      for _game in json.load(data):
+
+
+        team1 = find_team(_game['team1'], _game['alias_team1'])
+        team2 = find_team(_game['team2'], _game['alias_team2'])
+
+        game = Game()
+        game.team1 = team1
+        game.team2 = team2
+        game.time = datetime.datetime.strptime(_game['date'], '%Y-%m-%d')
+        game.place = _game['place']
+        game.round = _game['round']
+        game.group = _game['group']
+
+        db.session.add(game)
+        db.session.commit()         
+      
 
 class DropDB(Command):
     """
