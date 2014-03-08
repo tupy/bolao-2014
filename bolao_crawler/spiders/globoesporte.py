@@ -13,7 +13,7 @@ URL_SCHEME = 'http://globoesporte.globo.com/servico/esportes_campeonato/widget-u
 
 GROUPS = [
   ('A', 1069),
-  ('B', 1069),
+  ('B', 1070),
   ('C', 1071),
   ('D', 1072),
   ('E', 1073),
