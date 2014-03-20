@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action="{{url_for('.bet_game')}}" method="post">
+<input type="hidden" name="game_id" value="{{game.id}}" />
+{% if bet %}
+<input type="hidden" name="bet_id" value="{{bet.id}}" />
+{% endif %}
+<table class="table table-noborder bet-game"> 
+  <tr>
+    <td>
+      <input type="numeric" name="score_team1" value="{{bet.score_team1}}" placeholder="0" class="score" pattern="\d*" />
+    </td>
+    <td><span style="font-size: 1.5em;">x</span></td>
+    <td>
+      <input type="numeric" name="score_team2" value="{{bet.score_team2}}" placeholder="0" class="score" pattern="\d*" />
+    </td>
+  </tr>
+  <tr>
+    <td class="text-right"><img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team1.alias)}}" width="50" alt="{{game.team1}}" /><br />{{game.team1.name}}</td>
+    <td></td>
+    <td><img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team2.alias)}}" width="50" alt="{{game.team2}}" /><br />{{game.team2.name}}</td>
+  </tr>
+  <tr class="date">
+    <td colspan="3">
+      <small>{{game.time}} {{game.place}}</small>
+    </td>
+  </tr>
+</table>
+<button type="submit" class="btn btn-primary btn-lg btn-block">Salvar</button>
+</form>
+{% endblock %}

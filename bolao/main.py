@@ -72,10 +72,11 @@ def configure_extensions(app):
     admin = Admin(app)
 
     from flask.ext.admin.contrib.sqla import ModelView
-    from .models import Scorer, Team, Game, User
+    from .models import User, Scorer, Team, Game, BetGame
     from .database import db
 
     admin.add_view(ModelView(User, db.session))
     admin.add_view(ModelView(Scorer, db.session))
     admin.add_view(ModelView(Team, db.session))
     admin.add_view(ModelView(Game, db.session))
+    admin.add_view(ModelView(BetGame, db.session))

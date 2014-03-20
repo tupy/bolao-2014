@@ -6,7 +6,14 @@
 {% for game in games -%}
   <tr>
     <td class="text-right">{{game.team1.alias}}<img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team1.alias)}}" width="30" height="30" alt="{{game.team1}}" /></td>
-    <td> x </td>
+    <td class="score">{{ '%d x %d' % (game.score_team1, game.score_team2) if game.score_team1 is number else 'x'}}<br />
+    {% if game.id in bets -%}
+    {% set bet = bets[game.id] -%}
+    <small><a href="{{url_for('.bet_game_view', game_id=game.id)}}">{{bet.score_team1}} x {{bet.score_team2}}</a></small>
+    {%- else %}
+    <small><a href="{{url_for('.bet_game_view', game_id=game.id)}}">apostar</a></small>
+    {%- endif %}
+    </td>
     <td><img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team2.alias)}}" width="30" height="30" alt="{{game.team2}}" />{{game.team2.alias}}</td>
   </tr>
   <tr class="date">

@@ -1,17 +1,36 @@
 
+#content {
+  margin: 0 auto;
+  width: 300px;
+}
+
 .flag {
   margin: 0 12px;
 }
 
+.score {
+  text-align: center;
+}
+
 .table {
-  width: 300px;
-  margin: 0 auto;
+  width: 100%
 }
 
 .table > tbody > tr > td {
   color: #999;
   font-weight: bold;
   vertical-align: middle;
+}
+
+.bet-game td {
+  font-weight: normal;
+  text-align: center;
+}
+
+input.score {
+  text-align: center;
+  font-size: 2em;
+  width: 80px;
 }
 
 tr.date {
@@ -23,4 +42,8 @@ tr.date {
   border: none;
   padding-top: 0;
   font-weight: normal;
+}
+
+.table-noborder > tbody > tr > td {
+  border: none;
 }
