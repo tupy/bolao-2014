@@ -3,3 +3,4 @@ Flask-Admin
 Flask-Mobility
 flask-Script
 Flask-SQLAlchemy
+Flask-Testing
