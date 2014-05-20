@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/tupy/bolao.svg?branch=master)](https://travis-ci.org/tupy/bolao)
-
 bolao
 =====
 
