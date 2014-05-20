@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action="{{url_for('.bet_champions')}}" method="post">
+  <table class="table">
+  <tr>
+    <th>&nbsp;</th>
+    <th>1&ordm;</th>
+    <th>2&ordm;</th>
+    <th>3&ordm;</th>
+    <th>4&ordm;</th>
+  </tr>
+  {% for team in teams %}
+  <tr>
+    <td><img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%team.alias)}}" width="30" height="30" alt="{{team.name}}" />{{team.alias}}</td>
+    <td><input type="radio" name="first" value="{{team.id}}" {{'checked="checked"' if team.id == bet.first_id}}/>
+    <td><input type="radio" name="second" value="{{team.id}}" {{'checked="checked"' if team.id == bet.second_id}}/>
+    <td><input type="radio" name="third" value="{{team.id}}" {{'checked="checked"' if team.id == bet.third_id}}/>
+    <td><input type="radio" name="fourth" value="{{team.id}}" {{'checked="checked"' if team.id == bet.fourth_id}}/>
+  </tr>
+  {% endfor %}
+  </table>
+<button type="submit" class="btn btn-primary btn-lg btn-block">Salvar</button>  
+</form>
+{% endblock %}

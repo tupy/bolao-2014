@@ -58,4 +58,17 @@ class BetGame(db.Model):
   game = db.relationship('Game', foreign_keys=game_id)
   score_team1 = db.Column(db.Integer)
   score_team2 = db.Column(db.Integer)
-  
+
+
+class BetChampions(db.Model): 
+  id = db.Column(db.Integer, primary_key=True)
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+  user = db.relationship('User', foreign_keys=user_id)
+  first_id = db.Column(db.Integer, db.ForeignKey('team.id'))
+  first = db.relationship('Team', foreign_keys=first_id)
+  second_id = db.Column(db.Integer, db.ForeignKey('team.id'))
+  second = db.relationship('Team', foreign_keys=second_id)
+  third_id = db.Column(db.Integer, db.ForeignKey('team.id'))
+  third = db.relationship('Team', foreign_keys=third_id)
+  fourth_id = db.Column(db.Integer, db.ForeignKey('team.id'))
+  fourth = db.relationship('Team', foreign_keys=fourth_id)

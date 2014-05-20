@@ -2,6 +2,7 @@
 #content {
   margin: 0 auto;
   width: 300px;
+  padding-bottom: 15px;
 }
 
 .flag {
@@ -27,6 +28,10 @@
   text-align: center;
 }
 
+.bet-champions {
+  font-size: 1.5em;
+}
+
 input.score {
   text-align: center;
   font-size: 2em;
@@ -47,3 +52,4 @@ tr.date {
 .table-noborder > tbody > tr > td {
   border: none;
 }
+

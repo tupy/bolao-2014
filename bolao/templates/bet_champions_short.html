@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% macro render(team, position) %}
+<p><strong>{{position}}&ordm;</strong>
+{% if team %}
+<img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%team.alias)}}" width="30" height="30" alt="{{team.name}}" />{{team.name}}
+{% else %}
+&nbsp;&nbsp;<small>Não escolhido</small>
+{% endif %}
+</p>
+{% endmacro %}
+
+{% block content %}
+<h2>Suas apostas foram:</h2>
+<div class="bet-champions">
+  {{render(bet.first, 1)}}
+  {{render(bet.second, 2)}}
+  {{render(bet.third, 3)}}
+  {{render(bet.fourth, 4)}}
+</div>
+
+<a href="{{url_for('.bet_champions', edit='edit')}}" class="btn btn-default btn-block">Editar aposta</a>
+{% endblock %}
