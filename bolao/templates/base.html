@@ -4,14 +4,22 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Bolão da Copa{% endblock %}</title>
   <link href="{{url_for('static', filename='css/bootstrap.css')}}" rel="stylesheet" />
   <link href="{{url_for('static', filename='css/bolao.css')}}" rel="stylesheet" />
-  {% block css %}{% endblock %} 
-  {% block js %}{% endblock %} 
+  {% block css %}{% endblock %}
+  {% block js %}{% endblock %}
 </head>
 
 <body>
   <div id="content">
+  {% with messages = get_flashed_messages(with_categories=True) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  {% endwith %}
   {% block content %}
   {% endblock %}
   </div>

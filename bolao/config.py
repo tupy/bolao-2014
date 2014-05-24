@@ -1,4 +1,4 @@
-# -*- config:utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import logging
 from datetime import timedelta

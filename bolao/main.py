@@ -1,8 +1,11 @@
+# -*- coding: utf-8 -*-
 
 import flask
 
 from flask.ext.admin import Admin
+from flask.ext.login import LoginManager
 
+login_manager = LoginManager()
 
 def __import_variable(blueprint_path, module, variable_name):
     path = '.'.join(blueprint_path.split('.') + [module])
@@ -26,6 +29,7 @@ def app_factory(config, app_name=None, blueprints=None):
     configure_blueprints(app, blueprints or config.BLUEPRINTS)
     configure_database(app)
     configure_extensions(app)
+    configure_admin(app)
  #   configure_views(app)
 
     return app
@@ -69,13 +73,27 @@ def configure_database(app):
 def configure_extensions(app):
     """Configure extensions like mail and login here"""
 
-    admin = Admin(app)
+    login_manager.init_app(app)
+    login_manager.login_view = '.login'
+    login_manager.login_message = u'Ops! Você ainda está deslogado.'
+    login_manager.login_message_category = 'info'
 
-    from flask.ext.admin.contrib.sqla import ModelView
+    from bolao.models import User
+
+    @login_manager.user_loader
+    def load_user(userid):
+        return User.query.get(userid)
+
+
+def configure_admin(app):
+
+    from .admin import ModelView, IndexView, UserView
+    admin = Admin(app, index_view=IndexView())
+
     from .models import User, Scorer, Team, Game, BetGame, BetChampions
     from .database import db
 
-    admin.add_view(ModelView(User, db.session))
+    admin.add_view(UserView(User, db.session))
     admin.add_view(ModelView(Scorer, db.session))
     admin.add_view(ModelView(Team, db.session))
     admin.add_view(ModelView(Game, db.session))

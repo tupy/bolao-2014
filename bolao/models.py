@@ -1,16 +1,26 @@
-
+# -*- coding: utf-8 -*-
 
 from bolao.database import db
+from flask.ext.login import UserMixin
 
 
-class User(db.Model): 
+class User(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String(150))
   email = db.Column(db.String(50), unique=True)
+  password = db.Column(db.String(50))
+  active = db.Column(db.Boolean, default=False)
+  admin = db.Column(db.Boolean, default=False)
   score_games = db.Column(db.Integer, default=0)
   score_champions = db.Column(db.Integer, default=0)
   score_scorer = db.Column(db.Integer, default=0)
-  
+
+  def is_admin(self):
+    return self.admin
+
+  def is_active(self):
+    return self.active
+
   def __repr__(self):
     return self.name
 
@@ -31,7 +41,7 @@ class Scorer(db.Model):
 
   def __repr__(self):
     return self.name
-  
+
 
 class Game(db.Model):
   id = db.Column(db.Integer, primary_key=True)
@@ -60,7 +70,7 @@ class BetGame(db.Model):
   score_team2 = db.Column(db.Integer)
 
 
-class BetChampions(db.Model): 
+class BetChampions(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
   user = db.relationship('User', foreign_keys=user_id)
