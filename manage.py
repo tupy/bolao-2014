@@ -54,7 +54,10 @@ class CreateDB(Command):
             game = Game()
             game.team1 = team1
             game.team2 = team2
-            game.time = datetime.datetime.strptime(_game['date'], '%Y-%m-%d')
+            date_time = _game['date_time']
+            #FIXME drop the day of week
+            date_time = " ".join(date_time.split()[1:])
+            game.time = datetime.datetime.strptime(date_time, '%d/%m/%Y - %H:%M')
             game.place = _game['place']
             game.round = _game['round']
             game.group = _game['group']

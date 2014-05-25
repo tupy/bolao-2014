@@ -1,6 +1,17 @@
 # -*- coding: utf-8 -*-
 
+__locale__  = "pt_BR.utf8"
+__timezone__ = 'America/Sao_Paulo'
+
+import platform
+if platform.system() == 'Darwin':
+  __locale__  = "pt_BR.UTF-8"
+
 import os
+os.environ['TZ'] = __timezone__
+import locale
+locale.setlocale(locale.LC_ALL, __locale__)
+
 import flask
 
 from flask.ext.admin import Admin

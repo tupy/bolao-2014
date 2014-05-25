@@ -26,7 +26,7 @@
   </tr>
   <tr class="date">
     <td colspan="3">
-      <small>{{game.time}} {{game.place}}</small>
+      <small>{{game.time.strftime('%a %d/%m/%Y - %H:%M').decode('utf-8')}} {{game.place}}</small>
     </td>
   </tr>
 </table>
