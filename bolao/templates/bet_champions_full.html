@@ -2,7 +2,17 @@
 
 {% set title = 'Seleções Campeãs' %}
 
+{% block css %}
+<style>
+.table > tbody > tr > th {
+  border-top: none;
+  text-align: center;
+}
+</style>
+{% endblock %}
+
 {% block content %}
+<h3>Escolha e clique no botão "Salvar"</h3>
 <form action="{{url_for('.bet_champions')}}" method="post">
   <table class="table">
   <tr>
