@@ -2,7 +2,7 @@
 #content {
   margin: 0 auto;
   width: 300px;
-  padding-bottom: 15px;
+  padding: 15px 7px;
 }
 
 .flag {
@@ -18,9 +18,12 @@
 }
 
 .table > tbody > tr > td {
+  vertical-align: middle;
+}
+
+table.games > tbody > tr > td {
   color: #999;
   font-weight: bold;
-  vertical-align: middle;
 }
 
 .bet-game td {
@@ -53,3 +56,16 @@ tr.date {
   border: none;
 }
 
+.btn-primary {
+  background-color: #3ea909;
+  border-color: #2C7D00;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary {
+  background-color: #2C7D00;
+  border-color: #1F5800;
+}

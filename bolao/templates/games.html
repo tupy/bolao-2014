@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<table class="table">
+<table class="table games">
 {% for game in games -%}
   <tr>
     <td class="text-right">{{game.team1.alias}}<img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team1.alias)}}" width="30" height="30" alt="{{game.team1}}" /></td>

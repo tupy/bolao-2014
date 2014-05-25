@@ -26,7 +26,7 @@ body *
 .header,
 #footer
 {
-  background: #555;
+  background: #2C7D00;
   font-size: 16px;
   font-weight: bold;
   color: #fff;
@@ -48,5 +48,25 @@ body *
   position: absolute;
   top: 0;
   left: 10px;
+}
+
+html.mm-opening .mm-page,
+html.mm-opening #mm-blocker,
+html.mm-opening .mm-fixed-top,
+html.mm-opening .mm-fixed-bottom {
+  left: 65%;
+}
+
+.mm-menu {
+  width: 65%;
+}
+
+.mm-ismenu {
+  color: #e0e0e0;
+  background-color: #204D07;
+}
+
+.mm-list {
+  font-size: 1.1em;
 }
 
