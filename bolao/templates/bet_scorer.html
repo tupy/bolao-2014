@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Artilheiros{% endblock %}
+
+{% macro combo(name, label, selected=None) %}
+<div class="form-group">
+  <label for="{{name}}">{{label}}</label>
+  <select name="{{name}}" class="select-scorer form-control">
+    {% for scorer in scorers %}
+    <option value="{{scorer.id}}" {{'selected=selected' if selected == scorer.id }}>{{scorer.name}} ({{scorer.team.alias}})</option>
+    {% endfor %}
+    <option value="other" class="other">Outro</option>
+  </select>
+</div>
+<div id="{{name}}-other" style="display:none;">
+  <div class="form-group">
+    <input name="{{name}}-other" type="text" value="" placeholder="Digite o nome do artilheiro" class="form-control" />
+  </div>
+  <div class="form-group">
+    <select name="{{name}}-team" class="form-control">
+    {% for team in teams %}
+    <option value="{{team.id}}">{{team.alias}}</option>
+    {% endfor %}
+    </select>
+  </div>
+</div>
+{% endmacro %}
+
+{% block content %}
+<h2>Quem vai marcar mais gols nessa Copa?</h2>
+<form action="{{url_for('.bet_scorer')}}" method="post">
+{{combo('scorer1', 'Artilheiro 1', bet.scorer1_id)}}
+{{combo('scorer2', 'Artilheiro 2', bet.scorer2_id)}}
+<button type="submit" class="btn btn-primary btn-lg btn-block">Salvar</button>
+</form>
+{% endblock %}
+
+{% block js %}
+<script>
+$(function(){
+  $('.select-scorer').change(function(){
+    var name = $(this).attr('name');
+    if ($(this).val() == 'other') {
+      $('#'+name+'-other').show();
+    } else {
+      $('#'+name+'-other').hide();
+    }
+  });
+});
+</script>
+{% endblock %}

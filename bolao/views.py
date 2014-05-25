@@ -4,7 +4,8 @@ import flask
 from flask import render_template, request, redirect, url_for, g
 from flask.ext.login import login_user, logout_user, login_required
 
-from bolao.models import User, Team, Game, BetGame, BetChampions
+from bolao.models import User, Team, Game, Scorer
+from bolao.models import BetGame, BetChampions, BetScorer
 from bolao.database import db
 from bolao.forms import LoginForm
 from bolao.utils import generate_password_hash
@@ -75,6 +76,37 @@ def bet_champions():
 
   teams = Team.query.order_by(Team.name)
   return render_template('bet_champions_full.html', teams=teams, bet=bet)
+
+
+@app.route('/artilheiros', methods=['GET', 'POST'])
+@login_required
+def bet_scorer():
+  bet = BetScorer.query.filter_by(user=current_user).first()
+
+  if request.method == 'POST':
+    if bet is None:
+      bet = BetScorer(user=current_user)
+      db.session.add(bet)
+    bet.scorer1_id = __get_scorer('scorer1')
+    bet.scorer2_id = __get_scorer('scorer2')
+    db.session.commit()
+    flask.flash("Artilheiros salvos com sucesso!", category="success")
+  scorers = Scorer.query.order_by(Scorer.name)
+  teams = Team.query.order_by(Team.name)
+  return render_template('bet_scorer.html', bet=bet, scorers=scorers, teams=teams)
+
+
+def __get_scorer(name):
+  value = request.form.get(name)
+  if value == 'other':
+    scorer_name = request.form.get('%s-other' % name)
+    team_id = request.form.get('%s-team' % name)
+    team = Team.query.get(team_id)
+    scorer = Scorer(name=scorer_name, team=team)
+    db.session.add(scorer)
+    db.session.commit()
+    return scorer.id
+  return value
 
 
 @app.route("/login", methods=["GET", "POST"])
