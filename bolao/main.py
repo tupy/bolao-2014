@@ -27,6 +27,7 @@ def app_factory(config, app_name=None, blueprints=None):
 
     config = config_str_to_obj(config)
     configure_app(app, config)
+    configure_before_requests(app)
     configure_blueprints(app, blueprints or config.BLUEPRINTS)
     configure_database(app)
     configure_extensions(app)
@@ -40,6 +41,15 @@ def configure_app(app, config):
     """Loads configuration class into flask app"""
     app.config.from_object(config)
     app.config.from_envvar("APP_CONFIG", silent=True)  # available in the server
+
+
+def configure_before_requests(app):
+
+    from flask.ext.login import current_user
+
+    @app.before_request
+    def before_request():
+        flask.g.user = current_user
 
 
 def configure_blueprints(app, blueprints):

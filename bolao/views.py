@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import flask
-from flask import render_template, request, redirect, url_for
-from flask.ext.login import login_user, logout_user, login_required, current_user
+from flask import render_template, request, redirect, url_for, g
+from flask.ext.login import login_user, logout_user, login_required
 
 from bolao.models import User, Team, Game, BetGame, BetChampions
 from bolao.database import db
@@ -14,7 +14,7 @@ app = flask.Blueprint('bolao', __name__)
 
 @app.route('/')
 def index():
-  if current_user.is_anonymous():
+  if g.user.is_anonymous():
     return redirect(url_for('.login'))
   return redirect(url_for('.games'))
 
@@ -23,7 +23,7 @@ def index():
 @login_required
 def games():
   games = Game.query.order_by(Game.time)
-  bets = BetGame.query.filter_by(user=current_user)
+  bets = BetGame.query.filter_by(user=g.user)
   bets = {bet.game_id:bet for bet in bets}
   return render_template('games.html', games=games, bets=bets)
 
@@ -46,7 +46,7 @@ def bet_game():
   if bet_id:
     bet = BetGame.query.get(bet_id)
   else:
-    bet = BetGame(game=game, user=current_user)
+    bet = BetGame(game=game, user=g.user)
     db.session.add(bet)
   bet.score_team1 = int(request.form.get('score_team1') or 0)
   bet.score_team2 = int(request.form.get('score_team2') or 0)
@@ -58,11 +58,11 @@ def bet_game():
 @login_required
 def bet_champions():
 
-  bet = BetChampions.query.filter_by(user=current_user).first()
+  bet = BetChampions.query.filter_by(user=g.user).first()
 
   if request.method == 'POST':
     if bet is None:
-      bet = BetChampions(user=current_user)
+      bet = BetChampions(user=g.user)
       db.session.add(bet)
     bet.first_id = request.form.get('first')
     bet.second_id = request.form.get('second')
