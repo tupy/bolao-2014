@@ -81,11 +81,11 @@ def bet_champions():
 @app.route('/artilheiros', methods=['GET', 'POST'])
 @login_required
 def bet_scorer():
-  bet = BetScorer.query.filter_by(user=current_user).first()
+  bet = BetScorer.query.filter_by(user=g.user).first()
 
   if request.method == 'POST':
     if bet is None:
-      bet = BetScorer(user=current_user)
+      bet = BetScorer(user=g.user)
       db.session.add(bet)
     bet.scorer1_id = __get_scorer('scorer1')
     bet.scorer2_id = __get_scorer('scorer2')
@@ -111,7 +111,7 @@ def __get_scorer(name):
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-  if current_user.is_authenticated():
+  if g.user.is_authenticated():
     return redirect('/')
 
   form = LoginForm()
@@ -131,6 +131,6 @@ def login():
 
 @app.route("/logout")
 def logout():
-  if current_user.is_authenticated():
+  if g.user.is_authenticated():
     logout_user()
   return redirect('/')
