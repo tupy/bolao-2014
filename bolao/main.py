@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import flask
 
 from flask.ext.admin import Admin
@@ -29,8 +30,8 @@ def app_factory(config, app_name=None, blueprints=None):
     configure_blueprints(app, blueprints or config.BLUEPRINTS)
     configure_database(app)
     configure_extensions(app)
+    configure_views(app)
     configure_admin(app)
- #   configure_views(app)
 
     return app
 
@@ -84,6 +85,14 @@ def configure_extensions(app):
     def load_user(userid):
         return User.query.get(userid)
 
+
+def configure_views(app):
+
+
+    @app.route('/favicon.ico')
+    def favicon():
+          return flask.send_from_directory(os.path.join(app.root_path, 'static'),
+                                 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 def configure_admin(app):
 
