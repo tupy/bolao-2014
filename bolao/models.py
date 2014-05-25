@@ -12,8 +12,9 @@ class User(db.Model, UserMixin):
   active = db.Column(db.Boolean, default=False)
   admin = db.Column(db.Boolean, default=False)
   score_games = db.Column(db.Integer, default=0)
-  score_champions = db.Column(db.Integer, default=0)
-  score_scorer = db.Column(db.Integer, default=0)
+  games = db.relationship("BetGame", backref="user")
+  bet_champions = db.relationship("BetChampions", uselist=False, backref="user")
+  bet_scorer = db.relationship("BetScorer", uselist=False, backref="user")
 
   def is_admin(self):
     return self.admin
@@ -63,18 +64,16 @@ class Game(db.Model):
 class BetGame(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-  user = db.relationship('User', foreign_keys=user_id)
   game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
   game = db.relationship('Game', foreign_keys=game_id)
   score_team1 = db.Column(db.Integer)
   score_team2 = db.Column(db.Integer)
-  score = db.Column(db.Integer)
+  score = db.Column(db.Integer, default=0)
 
 
 class BetChampions(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-  user = db.relationship('User', foreign_keys=user_id)
   first_id = db.Column(db.Integer, db.ForeignKey('team.id'))
   first = db.relationship('Team', foreign_keys=first_id)
   second_id = db.Column(db.Integer, db.ForeignKey('team.id'))
@@ -83,15 +82,14 @@ class BetChampions(db.Model):
   third = db.relationship('Team', foreign_keys=third_id)
   fourth_id = db.Column(db.Integer, db.ForeignKey('team.id'))
   fourth = db.relationship('Team', foreign_keys=fourth_id)
-  score = db.Column(db.Integer)
+  score = db.Column(db.Integer, default=0)
 
 
 class BetScorer(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-  user = db.relationship('User', foreign_keys=user_id)
   scorer1_id = db.Column(db.Integer, db.ForeignKey('scorer.id'))
   scorer1 = db.relationship('Scorer', foreign_keys=scorer1_id)
   scorer2_id = db.Column(db.Integer, db.ForeignKey('scorer.id'))
   scorer2 = db.relationship('Scorer', foreign_keys=scorer2_id)
-  score = db.Column(db.Integer)
+  score = db.Column(db.Integer, default=0)

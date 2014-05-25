@@ -17,7 +17,13 @@ app = flask.Blueprint('bolao', __name__)
 def index():
   if g.user.is_anonymous():
     return redirect(url_for('.login'))
-  return redirect(url_for('.games'))
+  return profile(g.user.id)
+
+
+@app.route('/profile/<int:id>')
+def profile(id):
+  profile = User.query.get(id)
+  return render_template('profile.html', profile=profile)
 
 
 @app.route('/jogos')

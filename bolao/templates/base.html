@@ -40,6 +40,7 @@
   <nav id="menu-left">
     <ul>
       {% if current_user.is_authenticated() %}
+      <li{{' class=mm-selected' if '.index' in request.endpoint}}><a href="{{url_for('.index')}}">{{current_user.name}}</a></li>
       <li{{' class=mm-selected' if '.games' in request.endpoint}}><a href="{{url_for('.games')}}">Jogos</a></li>
       <li{{' class=mm-selected' if '.bet_champions' in request.endpoint}}><a href="{{url_for('.bet_champions')}}">Campeões</a></li>
       <li{{' class=mm-selected' if '.bet_scorer' in request.endpoint}}><a href="{{url_for('.bet_scorer')}}">Artilheiros</a></li>
