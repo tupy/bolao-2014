@@ -26,6 +26,12 @@ def profile(id):
   return render_template('profile.html', profile=profile)
 
 
+@app.route('/ranking')
+def ranking():
+  users = User.query.order_by(User.score_games)
+  return render_template('ranking.html', users=users)
+
+
 @app.route('/jogos')
 @login_required
 def games():

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% set title = "Ranking" %}
+
+{% block css %}
+<style>
+.table tr.active {
+  font-weight: bold;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Nome</th>
+      <th>pts</th>
+    </tr>
+  </thead>
+  {% for user in users %}
+  <tr{{' class=active' if current_user.id == user.id}}>
+    <td>{{loop.index}}º</td>
+    <td><a href="{{url_for('.profile', id=user.id)}}">{{user.name}}{{' (You)' if current_user.id == user.id}}</a></td>
+    <td>{{user.score_games}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

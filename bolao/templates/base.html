@@ -15,7 +15,9 @@
   {% block js %}{% endblock %}
   <script type="text/javascript">
     $(function() {
-      $('nav#menu-left').mmenu();
+      $('nav#menu-left').mmenu({
+          slidingSubmenus: false
+        });
     });
   </script>
 </head>
@@ -40,10 +42,14 @@
   <nav id="menu-left">
     <ul>
       {% if current_user.is_authenticated() %}
-      <li{{' class=mm-selected' if '.index' in request.endpoint}}><a href="{{url_for('.index')}}">{{current_user.name}}</a></li>
-      <li{{' class=mm-selected' if '.games' in request.endpoint}}><a href="{{url_for('.games')}}">Jogos</a></li>
-      <li{{' class=mm-selected' if '.bet_champions' in request.endpoint}}><a href="{{url_for('.bet_champions')}}">Campeões</a></li>
-      <li{{' class=mm-selected' if '.bet_scorer' in request.endpoint}}><a href="{{url_for('.bet_scorer')}}">Artilheiros</a></li>
+      <li{{' class=mm-selected' if '.index' in request.endpoint}}><a href="{{url_for('.index')}}">{{current_user.name}}</a>
+        <ul>
+          <li{{' class=mm-selected' if '.games' in request.endpoint}}><a href="{{url_for('.games')}}">Jogos</a></li>
+          <li{{' class=mm-selected' if '.bet_champions' in request.endpoint}}><a href="{{url_for('.bet_champions')}}">Campeões</a></li>
+          <li{{' class=mm-selected' if '.bet_scorer' in request.endpoint}}><a href="{{url_for('.bet_scorer')}}">Artilheiros</a></li>
+        </ul>
+      </li>
+      <li{{' class=mm-selected' if '.ranking' in request.endpoint}}><a href="{{url_for('.ranking')}}">Ranking</a></li>
       <li><a href="{{url_for('.logout')}}">Logout</a></li>
       {% else %}
       <li><a href="{{url_for('.login')}}">Login</a></li>
