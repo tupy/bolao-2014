@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% set title = "%s x %s" % (game.team1, game.team2) %}
+
 {% block content %}
 
 <form action="{{url_for('.bet_game')}}" method="post">
@@ -7,7 +9,7 @@
 {% if bet %}
 <input type="hidden" name="bet_id" value="{{bet.id}}" />
 {% endif %}
-<table class="table table-noborder bet-game"> 
+<table class="table table-noborder bet-game">
   <tr>
     <td>
       <input type="numeric" name="score_team1" value="{{bet.score_team1}}" placeholder="0" class="score" pattern="\d*" />

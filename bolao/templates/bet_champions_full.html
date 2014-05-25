@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% set title = 'Seleções Campeãs' %}
 
+{% block content %}
 <form action="{{url_for('.bet_champions')}}" method="post">
   <table class="table">
   <tr>
@@ -21,6 +22,6 @@
   </tr>
   {% endfor %}
   </table>
-<button type="submit" class="btn btn-primary btn-lg btn-block">Salvar</button>  
+<button type="submit" class="btn btn-primary btn-lg btn-block">Salvar</button>
 </form>
 {% endblock %}

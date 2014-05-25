@@ -4,15 +4,28 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Bolão da Copa{% endblock %}</title>
+  <title>{{title}} :: Bolão da Copa 2014</title>
   <link href="{{url_for('static', filename='css/bootstrap.css')}}" rel="stylesheet" />
+  <link href="{{url_for('static', filename='css/jquery.mmenu.css')}}" rel="stylesheet" />
   <link href="{{url_for('static', filename='css/bolao.css')}}" rel="stylesheet" />
+  <link href="{{url_for('static', filename='css/mobile.css')}}" rel="stylesheet" />
   <script src="{{url_for('static', filename='js/jquery-1.11.1.min.js')}}" ></script>
+  <script src="{{url_for('static', filename='js/jquery.mmenu.min.js')}}" ></script>
   {% block css %}{% endblock %}
   {% block js %}{% endblock %}
+  <script type="text/javascript">
+    $(function() {
+      $('nav#menu-left').mmenu();
+    });
+  </script>
 </head>
 
 <body>
+<div id="page">
+  <div id="header">
+    <a href="#menu-left"></a>
+    {{title or "Bolão da Copa"}}
+  </div>
   <div id="content">
   {% with messages = get_flashed_messages(with_categories=True) %}
   {% if messages %}
@@ -24,5 +37,18 @@
   {% block content %}
   {% endblock %}
   </div>
+  <nav id="menu-left">
+    <ul>
+      {% if current_user.is_authenticated() %}
+      <li{{' class=mm-selected' if '.games' in request.endpoint}}><a href="{{url_for('.games')}}">Jogos</a></li>
+      <li{{' class=mm-selected' if '.bet_champions' in request.endpoint}}><a href="{{url_for('.bet_champions')}}">Campeões</a></li>
+      <li{{' class=mm-selected' if '.bet_scorer' in request.endpoint}}><a href="{{url_for('.bet_scorer')}}">Artilheiros</a></li>
+      <li><a href="{{url_for('.logout')}}">Logout</a></li>
+      {% else %}
+      <li><a href="{{url_for('.login')}}">Login</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
 </body>
 </html>
