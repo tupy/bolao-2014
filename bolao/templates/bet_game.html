@@ -9,6 +9,7 @@
 {% if bet %}
 <input type="hidden" name="bet_id" value="{{bet.id}}" />
 {% endif %}
+<h4>Grupo {{game.group}}</h4>
 <table class="table table-noborder bet-game">
   <tr>
     <td>
@@ -26,7 +27,7 @@
   </tr>
   <tr class="date">
     <td colspan="3">
-      <small>{{game.time.strftime('%a %d/%m/%Y - %H:%M').decode('utf-8')}} {{game.place}}</small>
+      <small>{{game.time.strftime('%a %d/%m/%Y - %Hh%M').decode('utf-8')}} {{game.place}}</small>
     </td>
   </tr>
 </table>

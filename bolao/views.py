@@ -3,6 +3,7 @@
 import flask
 from flask import render_template, request, redirect, url_for, g
 from flask.ext.login import login_user, logout_user, login_required
+from collections import OrderedDict
 
 from bolao.models import User, Team, Game, Scorer
 from bolao.models import BetGame, BetChampions, BetScorer
@@ -36,9 +37,22 @@ def ranking():
 @login_required
 def games():
   games = Game.query.order_by(Game.time)
+  games_by_day = __group_by_day(games)
   bets = BetGame.query.filter_by(user=g.user)
   bets = {bet.game_id:bet for bet in bets}
-  return render_template('games.html', games=games, bets=bets)
+  return render_template('games.html', games_by_day=games_by_day, bets=bets)
+
+
+def __group_by_day(games):
+  groups = OrderedDict()
+  for game in games:
+    key = game.time.date()
+    if key in groups:
+      groups[key].append(game)
+    else:
+      groups[key] = [game]
+  return groups
+
 
 
 @app.route('/apostar_jogo/<int:game_id>')
