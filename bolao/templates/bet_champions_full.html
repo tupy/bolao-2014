@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% set title = 'Seleções Campeãs' %}
+{% set title = 'Palpitão do Campeão' %}
 
 {% block css %}
 <style>
@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block content %}
-<h3>Escolha e clique no botão "Salvar"</h3>
+<h3>Quais seleções serão as quatro primeiras colocadas da Copa do Mundo 2014?<br />Escolha e clique no botão "Salvar"</h3>
 <form action="{{url_for('.bet_champions')}}" method="post">
   <table class="table">
   <tr>
