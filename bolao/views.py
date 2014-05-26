@@ -113,8 +113,8 @@ def bet_scorer():
     if bet is None:
       bet = BetScorer(user=g.user)
       db.session.add(bet)
-    bet.scorer1_id = __get_scorer('scorer1')
-    bet.scorer2_id = __get_scorer('scorer2')
+    bet.scorer1_id = request.form.get('scorer1')
+    bet.scorer2_id = request.form.get('scorer2')
     db.session.commit()
     flask.flash("Artilheiros salvos com sucesso!", category="success")
   scorers = Scorer.query.order_by(Scorer.name)
@@ -122,17 +122,16 @@ def bet_scorer():
   return render_template('bet_scorer.html', bet=bet, scorers=scorers, teams=teams)
 
 
-def __get_scorer(name):
-  value = request.form.get(name)
-  if value == 'other':
-    scorer_name = request.form.get('%s-other' % name)
-    team_id = request.form.get('%s-team' % name)
-    team = Team.query.get(team_id)
-    scorer = Scorer(name=scorer_name, team=team)
-    db.session.add(scorer)
-    db.session.commit()
-    return scorer.id
-  return value
+@app.route('/ajax/add_scorer', methods=['POST'])
+@login_required
+def add_scorer():
+  name = request.form.get('name')
+  team_id = request.form.get('team')
+  team = Team.query.get(team_id)
+  scorer = Scorer(name=name, team=team)
+  db.session.add(scorer)
+  db.session.commit()
+  return flask.jsonify({"success": True, "scorer_id": scorer.id})
 
 
 @app.route("/login", methods=["GET", "POST"])

@@ -9,42 +9,72 @@
     {% for scorer in scorers %}
     <option value="{{scorer.id}}" {{'selected=selected' if selected == scorer.id }}>{{scorer.name}} ({{scorer.team.alias}})</option>
     {% endfor %}
-    <option value="other" class="other">Outro</option>
   </select>
-</div>
-<div id="{{name}}-other" style="display:none;">
-  <div class="form-group">
-    <input name="{{name}}-other" type="text" value="" placeholder="Digite o nome do artilheiro" class="form-control" />
-  </div>
-  <div class="form-group">
-    <select name="{{name}}-team" class="form-control">
-    {% for team in teams %}
-    <option value="{{team.id}}">{{team.name}}</option>
-    {% endfor %}
-    </select>
-  </div>
 </div>
 {% endmacro %}
 
 {% block content %}
 <h2>Quem será o artilheiro da Copa do Mundo 2014?</h2>
-<form action="{{url_for('.bet_scorer')}}" method="post">
+<form id="bet-scorer" action="{{url_for('.bet_scorer')}}" method="post">
 {{combo('scorer1', 'Palpite 1', bet.scorer1_id)}}
 {{combo('scorer2', 'Palpite 2', bet.scorer2_id)}}
+<button id="btn-add" type="button" class="btn btn-default btn-lg btn-block">Novo</button>
 <button type="submit" class="btn btn-primary btn-lg btn-block">Salvar</button>
+</form>
+<form id="add-scorer" style="display:none;">
+  <div class="form-group">
+    <input name="name" type="text" value="" placeholder="Digite o nome do artilheiro" class="form-control" />
+  </div>
+  <div class="form-group">
+    <select name="team" class="form-control">
+    {% for team in teams %}
+    <option value="{{team.id}}" data-alias="{{team.alias}}">{{team.name}} ({{team.alias}})</option>
+    {% endfor %}
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary btn-lg btn-block">Cadastrar</button>
+  <button id="btn-back" type="button" class="btn btn-default btn-lg btn-block">Voltar</button>
 </form>
 {% endblock %}
 
 {% block js %}
 <script>
 $(function(){
-  $('.select-scorer').change(function(){
-    var name = $(this).attr('name');
-    if ($(this).val() == 'other') {
-      $('#'+name+'-other').show();
-    } else {
-      $('#'+name+'-other').hide();
+  $('#btn-add').on('click', function(){
+    $("#bet-scorer").hide();
+    $("#add-scorer").show();
+  });
+  $('#btn-back').on('click', function(){
+    $("#add-scorer").hide();
+    $("#bet-scorer").show();
+  });
+  $("#add-scorer").on('submit', function(){
+    var $name = $(this).find('input[name=name]');
+    var $team = $(this).find('select[name=team] option:selected');
+    if (!$name.val()) {
+      // alert("Digite o nome do jogador");
+      $name.closest('div').addClass("has-error");
+      return false;
     }
+    $.ajax({
+      type: "POST",
+      url: "{{url_for('.add_scorer')}}",
+      data: { name: $name.val(), team: $team.val() }
+    }).done(function( data ) {
+      if (data.success) {
+        var text = $name.val() + " ("+ $team.data("alias") +")";
+        var option = $('<OPTION>').val(data.scorer_id).text(text);
+        $('#bet-scorer select').append(option);
+        $('#bet-scorer select[name=scorer2]').val(data.scorer_id);
+        $("#add-scorer").hide();
+        $("#bet-scorer").show();
+        // cleanup
+        $name.val('');
+        $team.closest('select').val($team.closest('select').find("option:first").val());
+        $name.closest('div').removeClass("has-error");
+      }
+    });
+    return false;
   });
 });
 </script>
