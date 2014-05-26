@@ -41,6 +41,9 @@
   </div>
   <nav id="menu-left">
     <ul>
+      {% if current_user.is_anonymous() %}
+      <li><a href="{{url_for('.login')}}">Login</a></li>
+      {% endif %}
       {% if current_user.is_authenticated() %}
       <li{{' class=mm-selected' if '.index' in request.endpoint}}><a href="{{url_for('.index')}}">{{current_user.name}}</a>
         <ul>
@@ -50,9 +53,10 @@
         </ul>
       </li>
       <li{{' class=mm-selected' if '.ranking' in request.endpoint}}><a href="{{url_for('.ranking')}}">Ranking</a></li>
+      {% endif %}
+      <li{{' class=mm-selected' if '.comofunciona' in request.endpoint}}><a href="{{url_for('.comofunciona')}}">Como funciona</a></li>
+      {% if current_user.is_authenticated() %}
       <li><a href="{{url_for('.logout')}}">Logout</a></li>
-      {% else %}
-      <li><a href="{{url_for('.login')}}">Login</a></li>
       {% endif %}
     </ul>
   </nav>

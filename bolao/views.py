@@ -146,3 +146,8 @@ def logout():
   if g.user.is_authenticated():
     logout_user()
   return redirect('/')
+
+
+@app.route('/como-funciona', defaults={"template": 'como_funciona.html'}, endpoint='comofunciona')
+def page(template):
+  return render_template(template)
