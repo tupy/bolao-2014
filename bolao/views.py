@@ -45,7 +45,7 @@ def games():
 @login_required
 def bet_game_view(game_id):
   game = Game.query.get(game_id)
-  bet = BetGame.query.filter_by(game=game).first()
+  bet = BetGame.query.filter_by(user=g.user, game=game).first()
   return render_template('bet_game.html', game=game, bet=bet)
 
 
