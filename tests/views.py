@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import datetime
 import flask
 
 from flask.ext.testing import TestCase
@@ -31,7 +32,8 @@ class ViewsTest(TestCase):
 
         bra = Team(name="Brasil", alias="BRA")
         usa = Team(name="United States", alias="USA")
-        game = Game(team1=bra, team2=usa)
+        now = datetime.datetime.utcnow()
+        game = Game(team1=bra, team2=usa, time=now)
         db.session.add(bra)
         db.session.add(usa)
         db.session.add(game)
