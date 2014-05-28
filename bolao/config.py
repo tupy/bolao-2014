@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import logging
 from datetime import timedelta, datetime
 
@@ -62,3 +63,7 @@ class Testing(Config):
     CSRF_ENABLED = False
     SQLALCHEMY_DATABASE_URI = "sqlite://"
     SQLALCHEMY_ECHO = False
+
+
+class Production(Config):
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI', 'mysql://root@localhost/bolao')
