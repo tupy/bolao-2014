@@ -73,6 +73,7 @@ def bet_game():
 
   if bet_id:
     bet = BetGame.query.get(bet_id)
+    bet.updated_at = datetime.now()
   else:
     bet = BetGame(game=game, user=g.user)
     db.session.add(bet)
@@ -93,7 +94,9 @@ def bet_champions():
   bet = BetChampions.query.filter_by(user=g.user).first()
 
   if request.method == 'POST':
-    if bet is None:
+    if bet:
+      bet.updated_at = datetime.now()
+    else:
       bet = BetChampions(user=g.user)
       db.session.add(bet)
     bet.first_id = request.form.get('first')
@@ -119,7 +122,9 @@ def bet_scorer():
   bet = BetScorer.query.filter_by(user=g.user).first()
 
   if request.method == 'POST':
-    if bet is None:
+    if bet:
+      bet.updated_at = datetime.now()
+    else:
       bet = BetScorer(user=g.user)
       db.session.add(bet)
     bet.scorer1_id = request.form.get('scorer1')

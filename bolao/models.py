@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from bolao.database import db
+from datetime import datetime
+
 from flask.ext.login import UserMixin
+from bolao.database import db
 
 
 class User(db.Model, UserMixin):
@@ -68,6 +70,8 @@ class BetGame(db.Model):
   game = db.relationship('Game', foreign_keys=game_id)
   score_team1 = db.Column(db.Integer)
   score_team2 = db.Column(db.Integer)
+  created_at = db.Column(db.DateTime(), default=datetime.now)
+  updated_at = db.Column(db.DateTime())
   score = db.Column(db.Integer, default=0)
 
 
@@ -82,6 +86,8 @@ class BetChampions(db.Model):
   third = db.relationship('Team', foreign_keys=third_id)
   fourth_id = db.Column(db.Integer, db.ForeignKey('team.id'))
   fourth = db.relationship('Team', foreign_keys=fourth_id)
+  created_at = db.Column(db.DateTime(), default=datetime.now)
+  updated_at = db.Column(db.DateTime())
   score = db.Column(db.Integer, default=0)
 
 
@@ -92,4 +98,6 @@ class BetScorer(db.Model):
   scorer1 = db.relationship('Scorer', foreign_keys=scorer1_id)
   scorer2_id = db.Column(db.Integer, db.ForeignKey('scorer.id'))
   scorer2 = db.relationship('Scorer', foreign_keys=scorer2_id)
+  created_at = db.Column(db.DateTime(), default=datetime.now)
+  updated_at = db.Column(db.DateTime())
   score = db.Column(db.Integer, default=0)
