@@ -38,10 +38,11 @@ def app_factory(config, app_name=None, blueprints=None):
 
     config = config_str_to_obj(config)
     configure_app(app, config)
-    configure_before_requests(app)
     configure_blueprints(app, blueprints or config.BLUEPRINTS)
     configure_database(app)
+    configure_context_processors(app);
     configure_extensions(app)
+    configure_before_requests(app)
     configure_views(app)
     configure_admin(app)
 
@@ -105,6 +106,14 @@ def configure_extensions(app):
     @login_manager.user_loader
     def load_user(userid):
         return User.query.get(userid)
+
+
+def configure_context_processors(app):
+
+    @app.context_processor
+    def context_vars():
+        from datetime import datetime
+        return dict(now=datetime.now)
 
 
 def configure_views(app):

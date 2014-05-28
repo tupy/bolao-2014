@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 project_name = "bolao"
 
@@ -45,6 +45,10 @@ class Config(object):
     # ex: BLUEPRINTS = ['blog']  # where app is a Blueprint instance
     # ex: BLUEPRINTS = [('blog', {'url_prefix': '/myblog'})]  # where app is a Blueprint instance
     BLUEPRINTS = ['bolao']
+
+    # BOLAO CONFIGURATION
+    BOLAO_BET_CHAMPIONS_LIMIT = datetime(2014, 6, 17, 23, 59)
+    BOLAO_BET_SCORER_LIMIT = datetime(2014, 6, 12, 16, 00)
 
 
 class Dev(Config):

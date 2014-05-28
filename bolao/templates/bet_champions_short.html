@@ -20,6 +20,7 @@
   {{render(bet.third, 3)}}
   {{render(bet.fourth, 4)}}
 </div>
-
+{% if now() < config.BOLAO_BET_CHAMPIONS_LIMIT %}
 <a href="{{url_for('.bet_champions', edit='edit')}}" class="btn btn-default btn-block">Editar aposta</a>
+{% endif %}
 {% endblock %}

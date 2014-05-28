@@ -1,0 +1,37 @@
+
+{% macro row_champion(team, position, pts=0) %}
+<tr>
+  <td>
+  <strong>{{position}}&ordm;</strong>
+{% if team %}
+<img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%team.alias)}}" width="30" height="30" alt="{{team.name}}" />{{team.name}}
+{% else %}
+&nbsp;&nbsp;<small>Não escolhido</small>
+{% endif %}
+  </td>
+  <td>{{pts}}</td>
+</tr>
+{% endmacro %}
+
+{% if profile.id == current_user.id or now() > config.BOLAO_BET_CHAMPIONS_LIMIT %}
+  {% if profile.bet_champions %}
+    {% set bet = profile.bet_champions %}
+    <table class="table">
+    <thead>
+      <th>Ranking da Copa</th>
+      <th width=50>pts</th>
+    </thead>
+      {{row_champion(bet.first, 1)}}
+      {{row_champion(bet.second, 2)}}
+      {{row_champion(bet.third, 3)}}
+      {{row_champion(bet.fourth, 4)}}
+    </table>
+    {% if profile.id == current_user.id and now() < config.BOLAO_BET_CHAMPIONS_LIMIT %}
+      <a href="{{url_for('.bet_champions', edit='edit')}}" class="btn btn-default btn-xs btn-block">Editar</a>
+    {% endif %}
+  {% elif profile.id == current_user.id and now() < config.BOLAO_BET_CHAMPIONS_LIMIT %}
+  <a href="{{url_for('.bet_champions')}}" class="btn btn-primary btn-block">Escolher primeiros colocados</a>
+  {% else %}
+  <p>Nenhuma seleção foi escolhida.</p>
+  {%endif %}
+{% endif %}

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import flask
+
+from datetime import datetime
 from flask import render_template, request, redirect, url_for, g
 from flask.ext.login import login_user, logout_user, login_required
 from collections import OrderedDict
@@ -54,7 +56,6 @@ def __group_by_day(games):
   return groups
 
 
-
 @app.route('/apostar_jogo/<int:game_id>')
 @login_required
 def bet_game_view(game_id):
@@ -85,6 +86,10 @@ def bet_game():
 @login_required
 def bet_champions():
 
+  if datetime.now() > flask.current_app.config['BOLAO_BET_CHAMPIONS_LIMIT']:
+    flask.flash(u'O prazo para escolher as primeiras colocadas expirou.', category='warning')
+    return redirect(url_for('.index'))
+
   bet = BetChampions.query.filter_by(user=g.user).first()
 
   if request.method == 'POST':
@@ -97,16 +102,20 @@ def bet_champions():
     bet.fourth_id = request.form.get('fourth')
     db.session.commit()
 
-  if bet and request.args.get('edit') != 'edit':
-    return render_template('bet_champions_short.html', bet=bet)
+  if bet is None or (bet and request.args.get('edit') == 'edit'):
+    teams = Team.query.order_by(Team.name)
+    return render_template('bet_champions_full.html', teams=teams, bet=bet)
 
-  teams = Team.query.order_by(Team.name)
-  return render_template('bet_champions_full.html', teams=teams, bet=bet)
+  return render_template('bet_champions_short.html', bet=bet)
 
 
 @app.route('/artilheiros', methods=['GET', 'POST'])
 @login_required
 def bet_scorer():
+  if datetime.now() > flask.current_app.config['BOLAO_BET_SCORER_LIMIT']:
+    flask.flash(u'O prazo para escolher os artilheiros expirou.', category='warning')
+    return redirect(url_for('.index'))
+
   bet = BetScorer.query.filter_by(user=g.user).first()
 
   if request.method == 'POST':

@@ -18,72 +18,8 @@
 <h1>{{profile.name}}</h1>
 <h2>{{profile.score_games + (profile.bet_champions.score or 0) + (profile.bet_scorer.score or 0)}} pontos</h2>
 
-
-{% macro row_champion(team, position, pts=0) %}
-<tr>
-  <td>
-  <strong>{{position}}&ordm;</strong>
-{% if team %}
-<img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%team.alias)}}" width="30" height="30" alt="{{team.name}}" />{{team.name}}
-{% else %}
-&nbsp;&nbsp;<small>Não escolhido</small>
-{% endif %}
-  </td>
-  <td>{{pts}}</td>
-</tr>
-{% endmacro %}
-
-{% if profile.bet_champions %}
-  {% set bet = profile.bet_champions %}
-  <table class="table">
-  <thead>
-    <th>Ranking da Copa</th>
-    <th width=50>pts</th>
-  </thead>
-    {{row_champion(bet.first, 1)}}
-    {{row_champion(bet.second, 2)}}
-    {{row_champion(bet.third, 3)}}
-    {{row_champion(bet.fourth, 4)}}
-  </table>
-  {% if profile.id == current_user.id %}
-    <a href="{{url_for('.bet_champions', edit='edit')}}" class="btn btn-default btn-xs btn-block">Editar</a>
-  {% endif %}
-{% elif profile.id == current_user.id %}
-<a href="{{url_for('.bet_champions')}}" class="btn btn-primary btn-block">Escolher primeiros colocados</a>
-{% else %}
-<p>Nenhuma seleção foi escolhida.</p>
-{%endif %}
-
-{% macro scorer_row(scorer, pts=0) %}
-<tr>
-  <td><img src="" /></td>
-  <td>
-    <strong>{{scorer.name}}</strong><br />
-    <img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%scorer.team.alias)}}" width="22" height="22" />
-    <span class="text-muted">{{scorer.team.name}}</span>
-  </td>
-  <td>{{pts}}</td>
-</tr>
-{% endmacro %}
-
-{% if profile.bet_scorer %}
-{% set bet = profile.bet_scorer %}
-  <table class="table scorer">
-    <thead>
-      <th colspan=2>Artilheiros</th>
-      <th width=50>pts</th>
-    </thead>
-    {{scorer_row(bet.scorer1)}}
-    {{scorer_row(bet.scorer2)}}
-  </table>
-  {% if profile.id == current_user.id %}
-    <a href="{{url_for('.bet_scorer')}}" class="btn btn-default btn-xs btn-block">Editar</a>
-  {% endif %}
-{% elif profile.id == current_user.id %}
-<a href="{{url_for('.bet_scorer')}}" class="btn btn-primary btn-block">Escolher meus artilheiros</a>
-{% else %}
-<p>Nenhum artilheiro foi escolhido.</p>
-{% endif %}
+{% include "profile_champions.html" %}
+{% include "profile_scorer.html" %}
 
 {% if profile.games %}
   <table class="table">

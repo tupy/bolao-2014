@@ -1,0 +1,33 @@
+
+{% macro scorer_row(scorer, pts=0) %}
+<tr>
+  <td><img src="" /></td>
+  <td>
+    <strong>{{scorer.name}}</strong><br />
+    <img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%scorer.team.alias)}}" width="22" height="22" />
+    <span class="text-muted">{{scorer.team.name}}</span>
+  </td>
+  <td>{{pts}}</td>
+</tr>
+{% endmacro %}
+
+{% if profile.id == current_user.id or now() > config.BOLAO_BET_SCORER_LIMIT %}
+  {% if profile.bet_scorer %}
+  {% set bet = profile.bet_scorer %}
+    <table class="table scorer">
+      <thead>
+        <th colspan=2>Artilheiros</th>
+        <th width=50>pts</th>
+      </thead>
+      {{scorer_row(bet.scorer1)}}
+      {{scorer_row(bet.scorer2)}}
+    </table>
+    {% if profile.id == current_user.id and now() < config.BOLAO_BET_SCORER_LIMIT %}
+      <a href="{{url_for('.bet_scorer')}}" class="btn btn-default btn-xs btn-block">Editar</a>
+    {% endif %}
+  {% elif profile.id == current_user.id and now() < config.BOLAO_BET_SCORER_LIMIT %}
+  <a href="{{url_for('.bet_scorer')}}" class="btn btn-primary btn-block">Escolher meus artilheiros</a>
+  {% else %}
+  <p>Nenhum artilheiro foi escolhido.</p>
+  {% endif %}
+{% endif %}
