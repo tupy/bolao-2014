@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% set title = "Sobre o Bolão" %}
+
+{% block css %}
+<style>
+.thumbnail {
+  width: 50px;
+  margin-right: 8px;
+  float: left;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<h3>Organização</h3>
+<p class="row">
+  <img src="{{url_for('static', filename='images/cassio.jpg')}}" class="thumbnail" />
+  Cássio Carneiro<br />
+  <span class="text-muted">cassio_carneiro@hotmail.com</span>
+</p>
+<p class="row">
+  <img src="{{url_for('static', filename='images/leandro.jpg')}}" class="thumbnail"  />
+  Leandro Matos<br />
+  <span class="text-muted">leandro@riachao.com</span>
+</p>
+<p><strong>Contato:</strong> <a href="mailto:comissaobolao@riachao.com">comissaobolao@riachao.com</a></p>
+<h3>Desenvolvimento</h3>
+<p class="row">
+  <img src="{{url_for('static', filename='images/tupy.jpg')}}" class="thumbnail" />
+  <a href="https://github.com/tupy">Osvaldo Matos Júnior (Tupy)</a>
+  <span class="text-muted">tupy@riachao.com</span>
+</p>
+{% endblock %}

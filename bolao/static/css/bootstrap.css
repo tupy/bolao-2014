@@ -271,6 +271,21 @@ hr {
   border-top: 1px solid #eee;
 }
 
+.clearfix:before,
+.clearfix:after,
+.container:before,
+.container:after,
+.row:before,
+.row:after {
+  display: table;
+  content: " ";
+}
+.clearfix:after,
+.container:after,
+.row:after {
+  clear: both;
+}
+
 .text-left {
   text-align: left;
 }

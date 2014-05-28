@@ -176,5 +176,7 @@ def logout():
 
 
 @app.route('/como-funciona', defaults={"template": 'como_funciona.html'}, endpoint='comofunciona')
+@app.route('/sobre', defaults={"template": 'sobre.html'}, endpoint='sobre')
 def page(template):
   return render_template(template)
+
