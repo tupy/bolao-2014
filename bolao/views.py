@@ -78,7 +78,7 @@ def bet_game():
   bet.score_team1 = int(request.form.get('score_team1') or 0)
   bet.score_team2 = int(request.form.get('score_team2') or 0)
   db.session.commit()
-  return redirect(url_for('.games'))
+  return redirect(url_for('.games', _anchor='game-%s' % game_id))
 
 
 @app.route('/campeoes', methods=['GET', 'POST'])

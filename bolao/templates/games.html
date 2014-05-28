@@ -8,6 +8,7 @@
 <h4>{{day.strftime("%A, %d de %B de %Y").decode('utf-8')}}</h4>
 <table class="table games">
 {% for game in games -%}
+  <a id="game-{{game.id}}"></a>
   <tr>
     <td class="text-right">{{game.team1.alias}}<img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team1.alias)}}" width="30" height="30" alt="{{game.team1}}" /></td>
     <td class="score">{{ '%d x %d' % (game.score_team1, game.score_team2) if game.score_team1 is number else 'x'}}<br />
