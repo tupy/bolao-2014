@@ -40,6 +40,23 @@
 {% block js %}
 <script>
 $(function(){
+  $('.select-scorer').on('change', function(){
+    var $other = $(this);
+    $('.select-scorer').each(function(){
+      if ($(this).attr('name') != $other.attr('name')) {
+        $(this).find('option').removeAttr('disabled');
+        $(this).find('option[value='+$other.val()+']').attr('disabled', 'disabled');
+        $other.find('option').removeAttr('disabled');
+        $other.find('option[value='+$(this).val()+']').attr('disabled', 'disabled');
+      }
+    });
+  });
+  if ($('.select-scorer').eq(0).val() == $('.select-scorer').eq(1).val()) {
+    var val = $('.select-scorer').eq(1).find('option:selected').next().val();
+    $('.select-scorer').eq(1).val(val).change();
+    // .attr('selected', 'selected');
+  }
+
   $('#btn-add').on('click', function(){
     $("#bet-scorer").hide();
     $("#add-scorer").show();
