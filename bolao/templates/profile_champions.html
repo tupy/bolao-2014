@@ -30,7 +30,7 @@
       <a href="{{url_for('.bet_champions', edit='edit')}}" class="btn btn-default btn-xs btn-block">Editar</a>
     {% endif %}
   {% elif profile.id == current_user.id and now() < config.BOLAO_BET_CHAMPIONS_LIMIT %}
-  <a href="{{url_for('.bet_champions')}}" class="btn btn-primary btn-block">Escolher primeiros colocados</a>
+  <a href="{{url_for('.bet_champions')}}" class="btn btn-default btn-block">Palpitar os primeiros colocados</a>
   {% else %}
   <p>Nenhuma seleção foi escolhida.</p>
   {%endif %}

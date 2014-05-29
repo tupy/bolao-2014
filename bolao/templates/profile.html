@@ -44,7 +44,7 @@
   <a href="{{url_for('.games')}}" class="btn btn-default btn-xs btn-block">Editar</a>
   {% endif %}
 {% elif profile.id == current_user.id %}
-<a href="{{url_for('.games')}}" class="btn btn-primary btn-block">Iniciar apostas nos jogos</a>
+<a href="{{url_for('.games')}}" class="btn btn-default btn-block">Iniciar apostas nos jogos</a>
 {% else %}
 <p>Nenhuma aposta de jogo foi feita.</p>
 {%endif %}

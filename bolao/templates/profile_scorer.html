@@ -26,7 +26,7 @@
       <a href="{{url_for('.bet_scorer')}}" class="btn btn-default btn-xs btn-block">Editar</a>
     {% endif %}
   {% elif profile.id == current_user.id and now() < config.BOLAO_BET_SCORER_LIMIT %}
-  <a href="{{url_for('.bet_scorer')}}" class="btn btn-primary btn-block">Escolher meus artilheiros</a>
+  <a href="{{url_for('.bet_scorer')}}" class="btn btn-default btn-block">Escolher meus artilheiros</a>
   {% else %}
   <p>Nenhum artilheiro foi escolhido.</p>
   {% endif %}
