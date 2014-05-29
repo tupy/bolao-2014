@@ -12,24 +12,24 @@ WIDGET_UUID = 'c36d99dd-918a-459f-bf0c-648dec5773af'
 URL_SCHEME = 'http://globoesporte.globo.com/servico/esportes_campeonato/widget-uuid/%(uuid)s/fases/fase-grupos-copa-do-mundo-2014/grupo/%(group_id)s/rodada/%(round)s/jogos.html'
 
 GROUPS = [
-  ('A', 1069),
-  ('B', 1070),
-  ('C', 1071),
-  ('D', 1072),
-  ('E', 1073),
-  ('F', 1074),
-  ('G', 1075),
-  ('H', 1166)
+    ('A', 1069),
+    ('B', 1070),
+    ('C', 1071),
+    ('D', 1072),
+    ('E', 1073),
+    ('F', 1074),
+    ('G', 1075),
+    ('H', 1166)
 ]
 
 GROUP_MAP = {v2:v1 for v1,v2 in GROUPS}
 
 def start_urls():
-  for group, group_id in GROUPS:
-    for i in range(1, 4):
-      data = dict(uuid=WIDGET_UUID, group_id=group_id, round=i)
-      url = URL_SCHEME % data
-      yield url
+    for group, group_id in GROUPS:
+        for i in range(1, 4):
+            data = dict(uuid=WIDGET_UUID, group_id=group_id, round=i)
+            url = URL_SCHEME % data
+            yield url
 
 
 class GloboEsporteSpider(Spider):
@@ -37,7 +37,7 @@ class GloboEsporteSpider(Spider):
     allowed_domains = ["globoesporte.com"]
     start_urls = start_urls()
 
-    rules = (    
+    rules = (
         # Extract links matching 'jogos.html' and parse them with the spider's method parse_game
         Rule(SgmlLinkExtractor(allow=('jogos\.html', )), callback='parse_games', follow=False),
     )

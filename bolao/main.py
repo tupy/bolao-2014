@@ -121,7 +121,7 @@ def configure_views(app):
 
     @app.route('/favicon.ico')
     def favicon():
-          return flask.send_from_directory(os.path.join(app.root_path, 'static'),
+        return flask.send_from_directory(os.path.join(app.root_path, 'static'),
                                  'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 def configure_admin(app):
