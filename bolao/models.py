@@ -27,6 +27,7 @@ class User(db.Model, UserMixin):
   def __repr__(self):
     return self.name
 
+
 class Team(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   alias = db.Column(db.String(3), unique=True)
@@ -34,6 +35,7 @@ class Team(db.Model):
 
   def __repr__(self):
     return self.name
+
 
 class Scorer(db.Model):
   id = db.Column(db.Integer, primary_key=True)
@@ -62,6 +64,7 @@ class Game(db.Model):
 
   def __repr__(self):
     return u"%s vs %s" % (self.team1, self.team2)
+
 
 class BetGame(db.Model):
   id = db.Column(db.Integer, primary_key=True)

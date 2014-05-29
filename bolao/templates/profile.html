@@ -29,14 +29,14 @@
     <th width=50>pts</th>
   </tr>
   </thead>
-  {% for bet in profile.games -%}
+  {% for bet in profile.games|sort(attribute='game.time') -%}
     {% set game = bet.game %}
     <tr>
       <td class="text-right"><img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team1.alias)}}" width="30" height="30" alt="{{game.team1}}" /></td>
       <td class="score">{{ '%d x %d' % (bet.score_team1, bet.score_team2)}}<br />
       </td>
       <td><img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team2.alias)}}" width="30" height="30" alt="{{game.team2}}" /></td>
-      <td>{{bet.score or '0'}}</td>
+      <td>{{bet.score}}</td>
     </tr>
   {% endfor %}
   </table>

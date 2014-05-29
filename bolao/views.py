@@ -28,6 +28,9 @@ def index():
 @app.route('/profile/<int:id>')
 def profile(id):
   profile = User.query.get(id)
+  # show only expired games for visitor
+  if g.user.get_id() != str(id):  # See Flask-Login reference
+    profile.games = [bet for bet in profile.games if __is_game_expired(bet.game)]
   return render_template('profile.html', profile=profile)
 
 
@@ -57,6 +60,9 @@ def __group_by_day(games):
       groups[key] = [game]
   return groups
 
+def __is_game_expired(game):
+    return datetime.now() > game.time + flask.current_app.config['BOLAO_BET_GAME_LIMIT']
+
 
 @app.route('/apostar_jogo/<int:game_id>')
 @login_required
@@ -64,7 +70,11 @@ def bet_game_view(game_id):
   if not g.user.is_active():
     flask.flash(INACTIVE_USER_MESSAGE, category='warning')
     return redirect(url_for('.games'))
+
   game = Game.query.get(game_id)
+  if __is_game_expired(game):
+    flask.flash(u'O prazo para apostar em <strong>%s</strong> expirou.' % game, category='warning')
+    return redirect(url_for('.games'))
   bet = BetGame.query.filter_by(user=g.user, game=game).first()
   return render_template('bet_game.html', game=game, bet=bet)
 

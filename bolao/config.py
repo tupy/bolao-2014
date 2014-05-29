@@ -50,6 +50,7 @@ class Config(object):
     # BOLAO CONFIGURATION
     BOLAO_BET_CHAMPIONS_LIMIT = datetime(2014, 6, 17, 23, 59)
     BOLAO_BET_SCORER_LIMIT = datetime(2014, 6, 12, 16, 00)
+    BOLAO_BET_GAME_LIMIT = timedelta(hours=-1)
 
 
 class Dev(Config):
