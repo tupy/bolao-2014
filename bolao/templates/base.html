@@ -42,7 +42,7 @@
   <nav id="menu-left">
     <ul>
       {% if current_user.is_anonymous() %}
-      <li><a href="{{url_for('.login')}}">Login</a></li>
+      <li><a href="{{url_for('.login')}}">Entrar</a></li>
       {% endif %}
       {% if current_user.is_authenticated() %}
       <li{{' class=mm-selected' if '.index' in request.endpoint}}><a href="{{url_for('.index')}}">{{current_user.name}}</a>

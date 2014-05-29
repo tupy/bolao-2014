@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% set title = "Participar do Bolão" %}
+
+{% block content %}
+<form action="{{url_for('.signup')}}" method="POST" role="form">
+  {% if form.errors %}
+    <div class="errors">
+        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+            {% for error in field_errors %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+  {% endif %}
+  {{ form.hidden_tag() }}
+  <div class="form-group">
+    {{form.name.label}}
+    {{form.name(class_='form-control', placeholder='Fulano da Silva')}}
+  </div>
+  <div class="form-group">
+    {{form.email.label}}
+    {{form.email(class_='form-control', placeholder='fulano@email.com')}}
+  </div>
+  <div class="form-group">
+    {{form.password.label}}
+    {{form.password(class_='form-control', placeholder='Lembre-se de sua senha')}}
+  </div>
+  <div class="form-group">
+    {{form.confirm_password.label}}
+    {{form.confirm_password(class_='form-control', placeholder='A mesma digitada acima')}}
+  </div>
+  <button type="submit" class="btn btn-primary btn-lg btn-block">Finalizar Cadastro</button>
+</form>
+{% endblock %}

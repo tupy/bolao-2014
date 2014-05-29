@@ -69,3 +69,23 @@ tr.date {
   background-color: #2C7D00;
   border-color: #1F5800;
 }
+
+.btn-blue {
+  color: #fff;
+  background-color: #428bca;
+  border-color: #357ebd;
+}
+.btn-blue:hover,
+.btn-blue:focus,
+.btn-blue:active,
+.btn-blue.active,
+.open > .dropdown-toggle.btn-blue {
+  color: #fff;
+  background-color: #3071a9;
+  border-color: #285e8e;
+}
+.btn-blue:active,
+.btn-blue.active,
+.open > .dropdown-toggle.btn-blue {
+  background-image: none;
+}

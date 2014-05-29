@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}Login{% endblock %}
+{% set title = "Login" %}
 
 {% block content %}
-<h2>Login</h2>
 <form action="{{url_for('.login')}}" method="POST" role="form">
   {% if form.errors %}
     <div class="errors">
@@ -24,5 +23,6 @@
     {{form.password(class_='form-control')}}
   </div>
   <button type="submit" class="btn btn-primary btn-lg btn-block">Entrar</button>
+  <a href="{{url_for('.signup')}}" class="btn btn-blue btn-lg btn-block">Participar do Bolão</a>
 </form>
 {% endblock %}

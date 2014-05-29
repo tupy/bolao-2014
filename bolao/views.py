@@ -7,16 +7,16 @@ from flask import render_template, request, redirect, url_for, g
 from flask.ext.login import login_user, logout_user, login_required
 from collections import OrderedDict
 
+from bolao.database import db
 from bolao.models import User, Team, Game, Scorer
 from bolao.models import BetGame, BetChampions, BetScorer
-from bolao.database import db
-from bolao.forms import LoginForm
+from bolao.forms import LoginForm, SignupForm
 from bolao.utils import generate_password_hash
 
 app = flask.Blueprint('bolao', __name__)
 
 INACTIVE_USER_MESSAGE = u'Apenas usuários autorizados podem reliazar apostas. Por favor, entre em <a href="/sobre">contato com a organização</a>'
-
+WELCOME_MESSAGE = u'Bem-vindo ao Bolão RIACHAO.COM. Aguarde instruções por e-mail para ativar sua conta.'
 
 @app.route('/')
 def index():
@@ -184,6 +184,22 @@ def logout():
   if g.user.is_authenticated():
     logout_user()
   return redirect('/')
+
+
+@app.route("/signup", methods=['GET', 'POST'])
+def signup():
+  form = SignupForm(request.form)
+  if form.validate_on_submit():
+    user = User()
+    user.name = form.name.data
+    user.email = form.email.data
+    user.password = generate_password_hash(form.password.data)
+    db.session.add(user)
+    db.session.commit()
+    login_user(user, remember=True, force=True)
+    flask.flash(WELCOME_MESSAGE, category='info')
+    return redirect(url_for('.index'))
+  return render_template('signup.html', form=form)
 
 
 @app.route('/como-funciona', defaults={"template": 'como_funciona.html'}, endpoint='comofunciona')
