@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(100))
     active = db.Column(db.Boolean, default=False)
     admin = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime(), default=datetime.now)
     score_games = db.Column(db.Integer, default=0)
     games = db.relationship("BetGame", backref="user")
     bet_champions = db.relationship("BetChampions", uselist=False, backref="user")

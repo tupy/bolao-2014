@@ -26,7 +26,7 @@ class ModelView(SQLAModelView, OnlyAdmin):
 
 
 class UserView(ModelView):
-    form_excluded_columns = ('password', 'score_games', 'score_champions', 'score_scorer', 'games', 'bet_champions', 'bet_scorer')
+    form_excluded_columns = ('password', 'created_at', 'score_games', 'score_champions', 'score_scorer', 'games', 'bet_champions', 'bet_scorer')
     column_exclude_list = ('password',)
     column_searchable_list = ('name', 'email')
 
