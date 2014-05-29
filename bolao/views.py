@@ -15,6 +15,8 @@ from bolao.utils import generate_password_hash
 
 app = flask.Blueprint('bolao', __name__)
 
+INACTIVE_USER_MESSAGE = u'Apenas usuários autorizados podem reliazar apostas. Por favor, entre em <a href="/sobre">contato com a organização</a>'
+
 
 @app.route('/')
 def index():
@@ -59,6 +61,9 @@ def __group_by_day(games):
 @app.route('/apostar_jogo/<int:game_id>')
 @login_required
 def bet_game_view(game_id):
+  if not g.user.is_active():
+    flask.flash(INACTIVE_USER_MESSAGE, category='warning')
+    return redirect(url_for('.games'))
   game = Game.query.get(game_id)
   bet = BetGame.query.filter_by(user=g.user, game=game).first()
   return render_template('bet_game.html', game=game, bet=bet)
@@ -90,6 +95,9 @@ def bet_champions():
   if datetime.now() > flask.current_app.config['BOLAO_BET_CHAMPIONS_LIMIT']:
     flask.flash(u'O prazo para escolher as primeiras colocadas expirou.', category='warning')
     return redirect(url_for('.index'))
+  elif not g.user.is_active():
+    flask.flash(INACTIVE_USER_MESSAGE, category='warning')
+    return redirect(url_for('.index'))
 
   bet = BetChampions.query.filter_by(user=g.user).first()
 
@@ -117,6 +125,9 @@ def bet_champions():
 def bet_scorer():
   if datetime.now() > flask.current_app.config['BOLAO_BET_SCORER_LIMIT']:
     flask.flash(u'O prazo para escolher os artilheiros expirou.', category='warning')
+    return redirect(url_for('.index'))
+  elif not g.user.is_active():
+    flask.flash(INACTIVE_USER_MESSAGE, category='warning')
     return redirect(url_for('.index'))
 
   bet = BetScorer.query.filter_by(user=g.user).first()
@@ -161,7 +172,7 @@ def login():
     user = User.query.filter_by(email=email, password=password).first()
     if user:
       user.authenticated = True
-      login_user(user, remember=True)
+      login_user(user, remember=True, force=True)  # force login for inactive users
       # flask.flash("Logged in successfully.", category='success')
       return redirect(request.args.get("next") or url_for(".index"))
     flask.flash(u'Usuário ou senha inválidos.', category='danger')

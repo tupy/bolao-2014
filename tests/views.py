@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-import flask
 
 from flask import url_for
 from flask.ext.testing import TestCase as FlaskTestCase
@@ -38,14 +37,12 @@ class GamesTest(TestCase):
         return app
 
     def setUp(self):
-
         db.create_all()
         self.user = User(name="Test", email="email@test.co")
         db.session.add(self.user)
         db.session.commit()
 
     def tearDown(self):
-
         db.session.remove()
         db.drop_all()
 
@@ -61,13 +58,36 @@ class GamesTest(TestCase):
         db.session.commit()
 
         with self.client.session_transaction() as sess:
-          sess['user_id'] = self.user.id
+            sess['user_id'] = self.user.id
 
         response = self.client.get("/jogos")
         self.assert200(response)
         self.assertIn('BRA', response.data)
         self.assertIn('USA', response.data)
 #        self.assert_template_used('games.html')
+
+    def test_bet_games_with_inactive_user(self):
+
+        from bolao.views import INACTIVE_USER_MESSAGE
+
+        bra = Team(name="Brasil", alias="BRA")
+        usa = Team(name="United States", alias="USA")
+        now = datetime.datetime.utcnow()
+        game = Game(team1=bra, team2=usa, time=now)
+        db.session.add(bra)
+        db.session.add(usa)
+        db.session.add(game)
+        db.session.commit()
+
+        user = User(name="Inactive", email="inactive@test.co", active=False)
+        db.session.add(user)
+        db.session.commit()
+
+        with self.client.session_transaction() as sess:
+            sess['user_id'] = user.id
+        response = self.client.get(url_for('.bet_game_view', game_id=game.id))
+        self.assertRedirects(response, url_for('.games'))
+        self.assert_flashes(INACTIVE_USER_MESSAGE, category='warning')
 
 
 class ChampionsTest(TestCase):
@@ -96,6 +116,20 @@ class ChampionsTest(TestCase):
         self.assertRedirects(response, url_for('bolao.index'))
         self.assert_flashes("O prazo para escolher as primeiras colocadas expirou.", category='warning')
 
+    def test_champions_with_inactive_user(self):
+
+        from bolao.views import INACTIVE_USER_MESSAGE
+
+        user = User(name="Inactive", email="inactive@test.co", active=False)
+        db.session.add(user)
+        db.session.commit()
+
+        with self.client.session_transaction() as sess:
+            sess['user_id'] = user.id
+        response = self.client.get('/campeoes')
+        self.assertRedirects(response, url_for('bolao.index'))
+        self.assert_flashes(INACTIVE_USER_MESSAGE, category='warning')
+
 
 class ScorerTest(TestCase):
 
@@ -123,3 +157,16 @@ class ScorerTest(TestCase):
         self.assertRedirects(response, url_for('bolao.index'))
         self.assert_flashes("O prazo para escolher os artilheiros expirou.", category='warning')
 
+    def test_scorer_with_inactive_user(self):
+
+        from bolao.views import INACTIVE_USER_MESSAGE
+
+        user = User(name="Inactive", email="inactive@test.co", active=False)
+        db.session.add(user)
+        db.session.commit()
+
+        with self.client.session_transaction() as sess:
+            sess['user_id'] = user.id
+        response = self.client.get('/artilheiros')
+        self.assertRedirects(response, url_for('bolao.index'))
+        self.assert_flashes(INACTIVE_USER_MESSAGE, category='warning')
