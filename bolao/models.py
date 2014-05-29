@@ -10,7 +10,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150))
     email = db.Column(db.String(50), unique=True)
-    password = db.Column(db.String(50))
+    password = db.Column(db.String(100))
     active = db.Column(db.Boolean, default=False)
     admin = db.Column(db.Boolean, default=False)
     score_games = db.Column(db.Integer, default=0)
