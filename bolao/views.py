@@ -178,7 +178,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         # login and validate the user...
-        email = form.email.data
+        email = form.email.data.lower()
         password = generate_password_hash(form.password.data)
         user = User.query.filter_by(email=email, password=password).first()
         if user:
@@ -203,7 +203,7 @@ def signup():
     if form.validate_on_submit():
         user = User()
         user.name = form.name.data
-        user.email = form.email.data
+        user.email = form.email.data.lower()
         user.password = generate_password_hash(form.password.data)
         db.session.add(user)
         db.session.commit()
