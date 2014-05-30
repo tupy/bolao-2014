@@ -31,5 +31,6 @@
     {{form.confirm_password(class_='form-control', placeholder='A mesma digitada acima')}}
   </div>
   <button type="submit" class="btn btn-primary btn-lg btn-block">Finalizar Cadastro</button>
+   <small>Ao clicar, você estará aceitando os termos presentes no <a href="{{url_for('static', filename='regulamento.pdf')}}">regulamento</a></small>
 </form>
 {% endblock %}
