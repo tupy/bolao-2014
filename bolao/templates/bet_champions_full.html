@@ -35,3 +35,16 @@
 <button type="submit" class="btn btn-primary btn-lg btn-block">Salvar</button>
 </form>
 {% endblock %}
+
+{% block js %}
+<script>
+$(function(){
+  $('input:radio').on('click', function() {
+    $(this).closest('tr').find('input:radio').each(function() {
+        this.checked = false;
+    });
+    this.checked = true;
+  });
+});
+</script>
+{% endblock %}
