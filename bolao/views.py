@@ -145,7 +145,7 @@ def bet_scorer():
 
     if request.method == 'POST':
         if bet:
-           bet.updated_at = datetime.now()
+            bet.updated_at = datetime.now()
         else:
             bet = BetScorer(user=g.user)
             db.session.add(bet)
@@ -205,6 +205,7 @@ def signup():
         user.name = form.name.data
         user.email = form.email.data.lower()
         user.password = generate_password_hash(form.password.data)
+        user.phone_number = form.phone_number.data
         db.session.add(user)
         db.session.commit()
         login_user(user, remember=True, force=True)
