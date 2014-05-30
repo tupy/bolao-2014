@@ -14,15 +14,13 @@
 <table class="table">
   <thead>
     <tr>
-      <th>#</th>
-      <th>Nome</th>
+      <th>Classificação</th>
       <th>pts</th>
     </tr>
   </thead>
   {% for user in users %}
   <tr{{' class=active' if current_user.id == user.id}}>
-    <td>{{loop.index}}º</td>
-    <td><a href="{{url_for('.profile', id=user.id)}}">{{user.name}}{{' (You)' if current_user.id == user.id}}</a></td>
+    <td>{{loop.index}} &nbsp; <a href="{{url_for('.profile', id=user.id)}}">{{user.name}}{{' (You)' if current_user.id == user.id}}</a></td>
     <td>{{user.score_games}}</td>
   </tr>
   {% endfor %}
