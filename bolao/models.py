@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
+from sqlalchemy import func
 
 from flask.ext.login import UserMixin
 from bolao.database import db
@@ -15,7 +16,6 @@ class User(db.Model, UserMixin):
     active = db.Column(db.Boolean, default=False)
     admin = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime(), default=datetime.now)
-    score_games = db.Column(db.Integer, default=0)
     games = db.relationship("BetGame", backref="user")
     bet_champions = db.relationship("BetChampions", uselist=False, backref="user")
     bet_scorer = db.relationship("BetScorer", uselist=False, backref="user")
@@ -25,6 +25,11 @@ class User(db.Model, UserMixin):
 
     def is_active(self):
         return self.active
+
+    @property
+    def score_games(self):
+        cursor = db.session.query(func.sum(BetGame.score)).filter_by(user=self)
+        return cursor.scalar() or 0
 
     def __repr__(self):
         return self.name

@@ -37,7 +37,8 @@ def profile(id):
 
 @app.route('/ranking')
 def ranking():
-    users = User.query.order_by(User.score_games)
+    #users = User.query.order_by(User.score_games)
+    users = User.query.all()
     return render_template('ranking.html', users=users)
 
 

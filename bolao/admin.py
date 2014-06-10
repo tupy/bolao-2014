@@ -5,7 +5,8 @@ from flask.ext.admin.contrib.sqla import ModelView as SQLAModelView
 from flask.ext import login
 
 from wtforms import PasswordField
-from .utils import generate_password_hash
+from bolao.utils import generate_password_hash
+from bolao.tasks import update_scores_by_game
 
 
 class OnlyAdmin(BaseView):
@@ -38,3 +39,14 @@ class UserView(ModelView):
     def on_model_change(self, form, model):
         if len(model.password2):
             model.password = generate_password_hash(form.password2.data)
+
+
+class GameView(ModelView):
+
+    can_create = False
+    can_delete = False
+    column_default_sort = 'time'
+
+    def on_model_change(self, form, model, is_created):
+        if not is_created:
+            update_scores_by_game(model)

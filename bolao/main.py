@@ -126,7 +126,7 @@ def configure_views(app):
 
 def configure_admin(app):
 
-    from .admin import ModelView, IndexView, UserView
+    from .admin import ModelView, IndexView, UserView, GameView
     admin = Admin(app, index_view=IndexView())
 
     from .models import User, Scorer, Team, Game
@@ -136,7 +136,7 @@ def configure_admin(app):
     admin.add_view(UserView(User, db.session, u'Usuários'))
     admin.add_view(ModelView(Scorer, db.session, 'Artilheiros'))
     # admin.add_view(ModelView(Team, db.session, u'Seleções'))
-    admin.add_view(ModelView(Game, db.session, 'Jogos'))
+    admin.add_view(GameView(Game, db.session, 'Jogos'))
     # admin.add_view(ModelView(BetGame, db.session))
     # admin.add_view(ModelView(BetChampions, db.session))
     # admin.add_view(ModelView(BetScorer, db.session))
