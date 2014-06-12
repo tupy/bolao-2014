@@ -6,7 +6,7 @@ from flask.ext import login
 
 from wtforms import PasswordField
 from bolao.utils import generate_password_hash
-from bolao.tasks import update_scores_by_game
+from bolao.tasks import update_scores_by_game, update_ranking
 
 
 class OnlyAdmin(BaseView):
@@ -50,3 +50,4 @@ class GameView(ModelView):
     def on_model_change(self, form, model, is_created):
         if not is_created:
             update_scores_by_game(model)
+            update_ranking()

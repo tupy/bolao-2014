@@ -2,6 +2,7 @@
 
 from datetime import datetime
 
+from sqlalchemy import desc
 from flask.ext.login import UserMixin
 from bolao.database import db
 
@@ -28,7 +29,7 @@ class User(db.Model, UserMixin):
 
     @classmethod
     def ranking(self):
-        return User.query.filter_by(active=True).order_by(User.score_games)
+        return User.query.filter_by(active=True).order_by(desc(User.score_games))
 
     def __repr__(self):
         return self.name

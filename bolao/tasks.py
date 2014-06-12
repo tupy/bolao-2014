@@ -1,6 +1,8 @@
 
+from sqlalchemy import func
+
 from bolao.database import db
-from bolao.models import BetGame
+from bolao.models import BetGame, User
 
 EXACT_RESULT = 18
 RESULT_AND_A_SCORE = 12
@@ -29,4 +31,8 @@ def update_scores_by_game(game):
     db.session.commit()
 
 
+def update_ranking():
+    for user in User.ranking():
+        user.score_games = db.session.query(func.sum(BetGame.score)).filter_by(user=user).scalar() or 0
 
+    db.session.commit()
