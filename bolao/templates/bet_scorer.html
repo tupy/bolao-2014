@@ -14,6 +14,7 @@
 {% endmacro %}
 
 {% block content %}
+<small>Apostas encerram às {{config.BOLAO_BET_SCORER_LIMIT.strftime('%Hh%M de %d/%m/%Y').decode('utf-8')}}</small>
 <h2>Quem será o artilheiro da Copa do Mundo 2014?</h2>
 <form id="bet-scorer" action="{{url_for('.bet_scorer')}}" method="post">
 {{combo('scorer1', 'Palpite 1', bet.scorer1_id)}}

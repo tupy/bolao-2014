@@ -12,6 +12,7 @@
 {% endblock %}
 
 {% block content %}
+<small>Apostas encerram às {{config.BOLAO_BET_CHAMPIONS_LIMIT.strftime('%Hh%M de %d/%m/%Y').decode('utf-8')}}</small>
 <h3>Quais seleções serão as quatro primeiras colocadas da Copa do Mundo 2014?<br />Escolha e clique no botão "Salvar"</h3>
 <form action="{{url_for('.bet_champions')}}" method="post">
   <table class="table">
