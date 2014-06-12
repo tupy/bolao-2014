@@ -43,7 +43,6 @@ class UpdateScoresGameTest(TestCase):
 
         update_scores_by_game(self.game)
         self.assertEqual(18, bet.score)
-        self.assertEqual(18, self.user.score_games)
 
     def test_exact_draw(self):
 
@@ -56,7 +55,6 @@ class UpdateScoresGameTest(TestCase):
 
         update_scores_by_game(self.game)
         self.assertEqual(18, bet.score)
-        self.assertEqual(18, self.user.score_games)
 
     def test_team1_result_with_score(self):
 
@@ -73,7 +71,6 @@ class UpdateScoresGameTest(TestCase):
 
         self.assertEqual(12, bet1.score)
         self.assertEqual(12, bet2.score)
-        self.assertEqual(24, self.user.score_games)
 
     def test_team2_result_with_score(self):
 
@@ -89,7 +86,6 @@ class UpdateScoresGameTest(TestCase):
         update_scores_by_game(self.game)
         self.assertEqual(12, bet1.score)
         self.assertEqual(12, bet2.score)
-        self.assertEqual(24, self.user.score_games)
 
     def test_team1_result(self):
 
@@ -102,7 +98,6 @@ class UpdateScoresGameTest(TestCase):
 
         update_scores_by_game(self.game)
         self.assertEqual(9, bet.score)
-        self.assertEqual(9, self.user.score_games)
 
     def test_team2_result(self):
 
@@ -115,7 +110,6 @@ class UpdateScoresGameTest(TestCase):
 
         update_scores_by_game(self.game)
         self.assertEqual(9, bet.score)
-        self.assertEqual(9, self.user.score_games)
 
     def test_draw(self):
 
@@ -128,7 +122,6 @@ class UpdateScoresGameTest(TestCase):
 
         update_scores_by_game(self.game)
         self.assertEqual(9, bet.score)
-        self.assertEqual(9, self.user.score_games)
 
     def test_only_score(self):
 
@@ -144,7 +137,6 @@ class UpdateScoresGameTest(TestCase):
         update_scores_by_game(self.game)
         self.assertEqual(3, bet1.score)
         self.assertEqual(3, bet2.score)
-        self.assertEqual(6, self.user.score_games)
 
 
     def test_no_score(self):
@@ -161,7 +153,6 @@ class UpdateScoresGameTest(TestCase):
         update_scores_by_game(self.game)
         self.assertEqual(0, bet1.score)
         self.assertEqual(0, bet2.score)
-        self.assertEqual(0, self.user.score_games)
 
 
     def test_user_without_bets(self):
@@ -171,7 +162,6 @@ class UpdateScoresGameTest(TestCase):
         db.session.commit()
 
         update_scores_by_game(self.game)
-        self.assertEqual(0, self.user.score_games)
 
 
     def test_update_score(self):
@@ -185,7 +175,6 @@ class UpdateScoresGameTest(TestCase):
 
         update_scores_by_game(self.game)
         self.assertEqual(9, bet.score)
-        self.assertEqual(9, self.user.score_games)
 
         self.game.score_team1 = 3
         self.game.score_team2 = 2
@@ -193,5 +182,4 @@ class UpdateScoresGameTest(TestCase):
 
         update_scores_by_game(self.game)
         self.assertEqual(0, bet.score)
-        self.assertEqual(0, self.user.score_games)
 

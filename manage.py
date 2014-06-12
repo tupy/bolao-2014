@@ -27,7 +27,7 @@ class CreateDB(Command):
         from bolao.database import db
         from bolao.utils import generate_password_hash
         password = os.urandom(5).encode('hex')
-        admin = User(name="Admin", email='admin@bolao.cup', active=True, admin=True)
+        admin = User(name="Admin", email='admin@bolao.cup', active=False, admin=True)
         admin.password = generate_password_hash(password)
         db.session.add(admin)
         db.session.commit()
