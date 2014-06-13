@@ -3,6 +3,7 @@
 import flask
 
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import func
 from datetime import datetime
 from flask import render_template, request, redirect, url_for, g
 from flask.ext.login import login_user, logout_user, login_required
@@ -39,6 +40,23 @@ def profile(id):
 @app.route('/ranking')
 def ranking():
     return render_template('ranking.html', users=User.ranking())
+
+
+@app.route('/estatisticas')
+def statistics():
+    games = Game.query.order_by(Game.time).all()
+
+    from sqlalchemy import select
+    query = select([
+      BetGame.game_id,
+      func.count(func.IF(BetGame.score_team1>BetGame.score_team2,1,None)).label("team1"),
+      func.count(func.IF(BetGame.score_team1==BetGame.score_team2,1,None)).label("draw"),
+      func.count(func.IF(BetGame.score_team1<BetGame.score_team2,1,None)).label("team2"),
+    ], group_by=BetGame.game_id).alias("game_stats")
+
+    game_stats = db.session.query(query).all()
+    game_stats = {x.game_id:x for x in game_stats}
+    return render_template("statistics.html", games=games, game_stats=game_stats)
 
 
 @app.route('/jogos')

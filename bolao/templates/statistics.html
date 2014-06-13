@@ -1,0 +1,26 @@
+{% extends "base.html" %} 
+
+
+{% set title = "Estatística" %}
+
+{% block content %}
+
+<table class="table games">
+<thead>
+  <tr>
+  <th></th>
+  <th>empate</th>
+  <th></th>
+</tr>
+</thead>
+{% for game in games %}
+{% set total = game_stats[game.id].team1 + game_stats[game.id].draw + game_stats[game.id].team2 %}
+<tr>
+  <td class="text-right">{{(100*game_stats[game.id].team1/total)|int}}%<img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team1.alias)}}" width="30" title="{{game.team1.name}}"></td>
+  <td class="text-center">{{(100*game_stats[game.id].draw/total)|int}}%</td>
+  <td><img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team2.alias)}}" width="30" title="{{game.team2.name}}">{{(100*game_stats[game.id].team2/total)|int}}%</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

@@ -53,6 +53,7 @@
         </ul>
       </li>
       <li{{' class=mm-selected' if '.ranking' in request.endpoint}}><a href="{{url_for('.ranking')}}">Ranking</a></li>
+      <li{{' class=mm-selected' if '.statistcs' in request.endpoint}}><a href="{{url_for('.statistics')}}">Estatística</a></li>
       {% endif %}
       <li{{' class=mm-selected' if '.comofunciona' in request.endpoint}}><a href="{{url_for('.comofunciona')}}">Como funciona</a></li>
       <li{{' class=mm-selected' if '.sobre' in request.endpoint}}><a href="{{url_for('.sobre')}}">Sobre</a></li>
