@@ -2,6 +2,7 @@
 
 import flask
 
+from sqlalchemy.exc import IntegrityError
 from datetime import datetime
 from flask import render_template, request, redirect, url_for, g
 from flask.ext.login import login_user, logout_user, login_required
@@ -90,8 +91,15 @@ def bet_game():
         bet = BetGame.query.get(bet_id)
         bet.updated_at = datetime.now()
     else:
-        bet = BetGame(game=game, user=g.user)
-        db.session.add(bet)
+        try:
+            bet = BetGame(game=game, user=g.user)
+            db.session.add(bet)
+            db.session.flush()
+        except IntegrityError, e:
+            db.session.rollback()
+            bet = BetGame.query.filter_by(user=g.user, game=game).first()
+            bet.updated_at = datetime.now()
+
     bet.score_team1 = int(request.form.get('score_team1') or 0)
     bet.score_team2 = int(request.form.get('score_team2') or 0)
     db.session.commit()

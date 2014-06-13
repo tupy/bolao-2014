@@ -7,7 +7,7 @@ from flask.ext.testing import TestCase as FlaskTestCase
 
 from bolao.main import app_factory
 from bolao.database import db
-from bolao.models import Game, Team, User
+from bolao.models import Game, Team, User, BetGame
 
 
 class TestCase(FlaskTestCase):
@@ -124,6 +124,42 @@ class GamesTest(TestCase):
         self.assertRedirects(response, url_for('.games'))
         self.assert_flashes(INACTIVE_USER_MESSAGE, category='warning')
 
+
+    def test_bet_game_duplicated(self):
+
+        bra = Team(name="Brasil", alias="BRA")
+        usa = Team(name="United States", alias="USA")
+        now = datetime.now()
+        game = Game(team1=bra, team2=usa, time=now)
+        db.session.add(bra)
+        db.session.add(usa)
+        db.session.add(game)
+        db.session.commit()
+
+        with self.client.session_transaction() as sess:
+            sess['user_id'] = self.user.id
+
+        data = {
+            'game_id': game.id,
+            'score_team1': 1,
+            'score_team2': 1
+        }
+        # first request
+        response = self.client.post(url_for('.bet_game'), data=data)
+        self.assertStatus(response, 302)
+        bets = BetGame.query.filter_by(game=game, user=self.user).all()
+        self.assertEqual(1, len(bets))
+        before = bets[0]
+        self.assertIsNone(before.updated_at)
+
+        # again
+        response = self.client.post(url_for('.bet_game'), data=data)
+        self.assertStatus(response, 302)
+        bets = BetGame.query.filter_by(game=game, user=self.user).all()
+        self.assertEqual(1, len(bets))
+        after = bets[0]
+        self.assertIsNotNone(after.updated_at)
+        self.assertGreater(after.updated_at, before.created_at)
 
 class ChampionsTest(TestCase):
 

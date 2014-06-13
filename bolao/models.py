@@ -83,6 +83,7 @@ class BetGame(db.Model):
     created_at = db.Column(db.DateTime(), default=datetime.now)
     updated_at = db.Column(db.DateTime())
     score = db.Column(db.Integer, default=0)
+    __table_args__ = (db.UniqueConstraint('user_id', 'game_id', name='uix_1'),)
 
 
 class BetChampions(db.Model):
