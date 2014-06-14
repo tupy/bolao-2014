@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime, timedelta
+from freezegun import freeze_time
 
 from flask import url_for
 from flask.ext.testing import TestCase as FlaskTestCase
@@ -174,19 +175,20 @@ class ChampionsTest(TestCase):
         db.session.remove()
         db.drop_all()
 
+    @freeze_time('2014-06-18')
     def test_view_champions_limit(self):
-        self.app.config['BOLAO_BET_CHAMPIONS_LIMIT'] = datetime(1990, 1, 1)
         response = self.client.get('/campeoes')
         self.assertRedirects(response, url_for('bolao.index'))
         self.assert_flashes("O prazo para escolher as primeiras colocadas expirou.", category='warning')
 
+    @freeze_time('2014-06-18')
     def test_bet_champions_limit(self):
         data = {}
-        self.app.config['BOLAO_BET_CHAMPIONS_LIMIT'] = datetime(1990, 1, 1)
         response = self.client.post('/campeoes', data=data)
         self.assertRedirects(response, url_for('bolao.index'))
         self.assert_flashes("O prazo para escolher as primeiras colocadas expirou.", category='warning')
 
+    @freeze_time('2014-06-01')
     def test_champions_with_inactive_user(self):
 
         from bolao.views import INACTIVE_USER_MESSAGE
@@ -215,19 +217,20 @@ class ScorerTest(TestCase):
         db.session.remove()
         db.drop_all()
 
+    @freeze_time('2014-06-13')
     def test_view_scorer_limit(self):
-        self.app.config['BOLAO_BET_SCORER_LIMIT'] = datetime(1990, 1, 1)
         response = self.client.get('/artilheiros')
         self.assertRedirects(response, url_for('bolao.index'))
         self.assert_flashes("O prazo para escolher os artilheiros expirou.", category='warning')
 
+    @freeze_time('2014-06-13')
     def test_bet_scorer_limit(self):
         data = {}
-        self.app.config['BOLAO_BET_SCORER_LIMIT'] = datetime(1990, 1, 1)
         response = self.client.post('/artilheiros', data=data)
         self.assertRedirects(response, url_for('bolao.index'))
         self.assert_flashes("O prazo para escolher os artilheiros expirou.", category='warning')
 
+    @freeze_time('2014-06-01')
     def test_scorer_with_inactive_user(self):
 
         from bolao.views import INACTIVE_USER_MESSAGE

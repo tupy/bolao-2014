@@ -6,3 +6,4 @@ flask-Script
 Flask-SQLAlchemy
 Flask-Testing
 Flask-WTF
+freezegun==0.1.18
