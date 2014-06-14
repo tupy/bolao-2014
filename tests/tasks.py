@@ -22,11 +22,14 @@ class UpdateScoresGameTest(TestCase):
         db.session.add(game)
 
         user = User(name="Test", email="email@test.co", active=True)
+        user2 = User(name="Test2", email="email2@test.co", active=True)
         db.session.add(user)
+        db.session.add(user2)
         db.session.commit()
 
         self.game = game
         self.user = user
+        self.user2 = user2
 
     def tearDown(self):
         db.session.remove()
@@ -62,7 +65,7 @@ class UpdateScoresGameTest(TestCase):
         self.game.score_team2 = 0
 
         bet1 = BetGame(user=self.user, game=self.game, score_team1=2, score_team2=1)
-        bet2 = BetGame(user=self.user, game=self.game, score_team1=1, score_team2=0)
+        bet2 = BetGame(user=self.user2, game=self.game, score_team1=1, score_team2=0)
         db.session.add(bet1)
         db.session.add(bet2)
         db.session.commit()
@@ -78,7 +81,7 @@ class UpdateScoresGameTest(TestCase):
         self.game.score_team2 = 2
 
         bet1 = BetGame(user=self.user, game=self.game, score_team1=1, score_team2=2)
-        bet2 = BetGame(user=self.user, game=self.game, score_team1=0, score_team2=1)
+        bet2 = BetGame(user=self.user2, game=self.game, score_team1=0, score_team2=1)
         db.session.add(bet1)
         db.session.add(bet2)
         db.session.commit()
@@ -129,7 +132,7 @@ class UpdateScoresGameTest(TestCase):
         self.game.score_team2 = 0
 
         bet1 = BetGame(user=self.user, game=self.game, score_team1=1, score_team2=0)
-        bet2 = BetGame(user=self.user, game=self.game, score_team1=0, score_team2=1)
+        bet2 = BetGame(user=self.user2, game=self.game, score_team1=0, score_team2=1)
         db.session.add(bet1)
         db.session.add(bet2)
         db.session.commit()
@@ -145,7 +148,7 @@ class UpdateScoresGameTest(TestCase):
         self.game.score_team2 = 0
 
         bet1 = BetGame(user=self.user, game=self.game, score_team1=1, score_team2=2)
-        bet2 = BetGame(user=self.user, game=self.game, score_team1=2, score_team2=1)
+        bet2 = BetGame(user=self.user2, game=self.game, score_team1=2, score_team2=1)
         db.session.add(bet1)
         db.session.add(bet2)
         db.session.commit()
@@ -204,12 +207,9 @@ class UpdateRankingTest(TestCase):
 
         db.session.commit()
 
-
     def tearDown(self):
         db.session.remove()
         db.drop_all()
-
-
 
     def test_update_ranking(self):
 
