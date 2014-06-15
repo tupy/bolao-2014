@@ -105,6 +105,10 @@ def bet_game():
     bet_id = request.form.get('bet_id')
     game = Game.query.get(game_id)
 
+    if __is_game_expired(game):
+        flask.flash(u'O prazo para apostar em <strong>%s</strong> expirou.' % game, category='warning')
+        return redirect(url_for('.games'))
+
     if bet_id:
         bet = BetGame.query.get(bet_id)
         bet.updated_at = datetime.now()

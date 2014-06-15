@@ -102,6 +102,27 @@ class GamesTest(TestCase):
         expected_message = u"O prazo para apostar em <strong>%s</strong> expirou." % game
         self.assert_flashes(expected_message, category='warning')
 
+    def test_bet_game_after_limit(self):
+        bra = Team(name="Brasil", alias="BRA")
+        usa = Team(name="United States", alias="USA")
+        now = datetime.now() + timedelta(days=-1)
+        game = Game(team1=bra, team2=usa, time=now)
+        db.session.add(bra)
+        db.session.add(usa)
+        db.session.add(game)
+        db.session.commit()
+
+        with self.client.session_transaction() as sess:
+            sess['user_id'] = self.user.id
+
+        data = {
+            'game_id': game.id,
+        }
+        response = self.client.post(url_for('.bet_game'), data=data)
+        self.assertRedirects(response, url_for('.games'))
+        expected_message = u"O prazo para apostar em <strong>%s</strong> expirou." % game
+        self.assert_flashes(expected_message, category='warning')
+
     def test_bet_games_with_inactive_user(self):
 
         from bolao.views import INACTIVE_USER_MESSAGE
