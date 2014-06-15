@@ -89,3 +89,19 @@ tr.date {
 .open > .dropdown-toggle.btn-blue {
   background-image: none;
 }
+
+.table.ranking > tbody > tr > td.active {
+  background-color: transparent;
+}
+
+.ranking .active {
+  font-weight: bold;
+}
+
+.top10 {
+  background-color: #F0FFE7;
+}
+
+.bot10 {
+  background-color: #FFE6E0;
+}

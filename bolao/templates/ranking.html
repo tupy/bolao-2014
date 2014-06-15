@@ -2,16 +2,8 @@
 
 {% set title = "Ranking" %}
 
-{% block css %}
-<style>
-.table tr.active {
-  font-weight: bold;
-}
-</style>
-{% endblock %}
-
 {% block content %}
-<table class="table">
+<table class="ranking table">
   <thead>
     <tr>
       <th>Classificação</th>
@@ -19,8 +11,8 @@
     </tr>
   </thead>
   {% for user in users %}
-  <tr{{' class=active' if current_user.id == user.id}}>
-    <td>{{loop.index}} &nbsp; <a href="{{url_for('.profile', id=user.id)}}">{{user.name}}{{' (You)' if current_user.id == user.id}}</a></td>
+  <tr{{' class=top10' if loop.index <= 10 else ' class=bot10' if loop.index > loop.length-9 }}>
+    <td{{' class=active' if current_user.id == user.id}}>{{loop.index}} &nbsp; <a href="{{url_for('.profile', id=user.id)}}">{{user.name}}{{' (You)' if current_user.id == user.id}}</a></td>
     <td>{{user.score_games}}</td>
   </tr>
   {% endfor %}
