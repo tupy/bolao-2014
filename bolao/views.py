@@ -42,7 +42,7 @@ def ranking():
     return render_template('ranking.html', users=User.ranking())
 
 
-@app.route('/estatisticas')
+@app.route('/estatistica')
 def statistics():
     games = Game.query.order_by(Game.time).all()
 

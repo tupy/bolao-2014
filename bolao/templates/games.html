@@ -11,7 +11,7 @@
   <a id="game-{{game.id}}"></a>
   <tr>
     <td class="text-right">{{game.team1.alias}}<img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team1.alias)}}" width="30" height="30" alt="{{game.team1}}" /></td>
-    <td class="score">{{ '%d x %d' % (game.score_team1, game.score_team2) if game.score_team1 is number else 'x'}}<br />
+    <td class="score">{{ '%d x %d' % (game.score_team1, game.score_team2) if game.score_team1 is not none else 'x'}}<br />
     {% if game.id in bets -%}
       {% set bet = bets[game.id] -%}
       {% if now() < game.time + config.BOLAO_BET_GAME_LIMIT %}
