@@ -32,10 +32,11 @@ def index():
 @app.route('/profile/<int:id>')
 def profile(id):
     profile = User.query.get(id)
+    num_games = db.session.query(func.count()).filter(Game.score_team1 != None).scalar()
     # show only expired games for visitor
     if g.user.get_id() != str(id):  # See Flask-Login reference
         profile.games = [bet for bet in profile.games if __is_game_expired(bet.game)]
-    return render_template('profile.html', profile=profile)
+    return render_template('profile.html', profile=profile, num_games=num_games)
 
 
 @app.route('/ranking')

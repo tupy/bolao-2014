@@ -64,6 +64,10 @@
       <td>{{bet.score}}</td>
     </tr>
   {% endfor %}
+  <tr class="total">
+    <td colspan=3>Total (aproveitamento {{((100*profile.score_games)/(18*num_games))|round(2)}}%)</td>
+    <td>{{profile.score_games}}</td>
+  </tr>
   </table>
   {% if profile.id == current_user.id %}
   <a href="{{url_for('.games')}}" class="btn btn-default btn-xs btn-block">Editar</a>

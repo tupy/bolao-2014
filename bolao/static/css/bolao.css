@@ -105,3 +105,8 @@ tr.date {
 .bot10 {
   background-color: #FFE6E0;
 }
+
+.total {
+  font-weight: bold;
+  border-top: 2px solid #ddd;
+}
