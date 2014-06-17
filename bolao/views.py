@@ -65,11 +65,11 @@ def statistics():
 def games():
     show = request.args.get('show')
     if show == 'all':
-        games = Game.query.order_by(Game.time)
+        games = Game.query.order_by(Game.time).all()
     else:
         today = datetime.now().date()
         limit = 6 if today < date(2014, 06, 22) else 8
-        games = Game.query.filter(Game.time>=today).order_by(Game.time).limit(limit)
+        games = Game.query.filter(Game.time>=today).order_by(Game.time).limit(limit).all()
     games_by_day = __group_by_day(games)
     bets = BetGame.query.filter_by(user=g.user)
     bets = {bet.game_id:bet for bet in bets}
