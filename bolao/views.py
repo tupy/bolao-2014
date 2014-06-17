@@ -18,7 +18,7 @@ from bolao.utils import generate_password_hash
 
 app = flask.Blueprint('bolao', __name__)
 
-INACTIVE_USER_MESSAGE = u'Apenas usuários autorizados podem reliazar apostas. Por favor, entre em <a href="/sobre">contato com a organização</a>'
+INACTIVE_USER_MESSAGE = u'Apenas usuários autorizados podem realizar apostas. Por favor, entre em <a href="/sobre">contato com a organização</a>'
 WELCOME_MESSAGE = u'Bem-vindo ao Bolão RIACHAO.COM. Aguarde instruções por e-mail para ativar sua conta.'
 
 
