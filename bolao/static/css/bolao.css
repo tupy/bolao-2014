@@ -110,3 +110,27 @@ tr.date {
   font-weight: bold;
   border-top: 2px solid #ddd;
 }
+
+.ranking .up, .ranking .down {
+  font-size: 11px;
+}
+
+.ranking .up {
+  color: #009900;
+}
+
+.ranking .down {
+  color: #FF0033;
+}
+
+.ranking .up::before {
+  content: "▲";
+  font-size: 9px;
+}
+
+.ranking .down::before {
+  content: "▼";
+  font-size: 9px;
+}
+
+

@@ -2,6 +2,13 @@
 
 {% set title = "Ranking" %}
 
+{% macro diff(user) %}
+  {% set diff = user.last_pos - user.pos %}
+  {% if diff != 0 %}
+  <span class="{{'up' if diff > 0 else 'down'}}">{{diff|abs}}</span>
+  {% endif %}
+{% endmacro %}
+
 {% block content %}
 <table class="ranking table">
   <thead>
@@ -12,7 +19,7 @@
   </thead>
   {% for user in users %}
   <tr{{' class=top10' if loop.index <= 10 else ' class=bot10' if loop.index > loop.length-9 }}>
-    <td{{' class=active' if current_user.id == user.id}}>{{loop.index}} &nbsp; <a href="{{url_for('.profile', id=user.id)}}">{{user.name}}{{' (You)' if current_user.id == user.id}}</a></td>
+    <td{{' class=active' if current_user.id == user.id}}>{{loop.index}} &nbsp; <a href="{{url_for('.profile', id=user.id)}}">{{user.name}}{{' (You)' if current_user.id == user.id}}</a>{{diff(user)}}</td>
     <td>{{user.score_games}}</td>
   </tr>
   {% endfor %}

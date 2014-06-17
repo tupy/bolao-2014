@@ -15,6 +15,8 @@ class User(db.Model, UserMixin):
     active = db.Column(db.Boolean, default=False)
     admin = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime(), default=datetime.now)
+    last_pos = db.Column(db.Integer)
+    pos = db.Column(db.Integer)
     score_games = db.Column(db.Integer, default=0)
     crit_exact = db.Column(db.Integer, default=0)
     crit_game_result = db.Column(db.Integer, default=0)

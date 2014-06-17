@@ -36,7 +36,12 @@ def update_ranking():
     for user in User.ranking():
         user.score_games = db.session.query(func.sum(BetGame.score)).filter_by(user=user).scalar() or 0
         update_ranking_criterias(user)
+    db.session.commit()
 
+    # update ranking position
+    for pos, user in enumerate(User.ranking()):
+        user.last_pos = user.pos
+        user.pos = pos + 1
     db.session.commit()
 
 
