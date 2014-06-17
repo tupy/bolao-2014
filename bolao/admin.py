@@ -27,8 +27,10 @@ class ModelView(SQLAModelView, OnlyAdmin):
 
 
 class UserView(ModelView):
-    form_excluded_columns = ('password', 'created_at', 'score_games', 'score_champions', 'score_scorer', 'games', 'bet_champions', 'bet_scorer')
-    column_exclude_list = ('password',)
+    form_excluded_columns = ('password', 'created_at', 'score_games', 'score_champions', 'score_scorer',
+      'crit_exact', 'crit_game_result', 'crit_win_goals', 'crit_lose_goals',
+      'games', 'bet_champions', 'bet_scorer')
+    column_exclude_list = ('password',  'crit_exact', 'crit_game_result', 'crit_win_goals', 'crit_lose_goals')
     column_searchable_list = ('name', 'email')
 
     def scaffold_form(self):
@@ -45,6 +47,7 @@ class GameView(ModelView):
 
     can_create = False
     can_delete = False
+    page_size = 50
     column_default_sort = 'time'
 
     def on_model_change(self, form, model, is_created):
