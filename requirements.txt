@@ -1,5 +1,5 @@
 Flask
-Flask-Admin
+Flask-Admin==1.0.8
 Flask-Login
 Flask-Mobility
 flask-Script

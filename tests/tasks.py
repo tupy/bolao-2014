@@ -4,7 +4,7 @@ from flask.ext.testing import TestCase
 
 from bolao.models import Team, User, Game, BetGame
 from bolao.main import app_factory
-from bolao.tasks import update_scores_by_game, update_ranking
+from bolao.tasks import update_scores_by_game, update_ranking, update_ranking_criterias
 from bolao.database import db
 
 
@@ -198,12 +198,25 @@ class UpdateRankingTest(TestCase):
         bra = Team(name='Brasil', alias='BRA')
         arg = Team(name='Argentina', alias='ARG')
         uru = Team(name='Uruguai', alias='URU')
+        chi = Team(name='Chile', alias='CHI')
         self.game1 = Game(team1=bra, team2=arg)
         self.game2 = Game(team1=bra, team2=uru)
-        self.game3 = Game(team1=arg, team2=uru)
+        self.game3 = Game(team1=bra, team2=chi)
+        self.game4 = Game(team1=arg, team2=uru)
+        self.game5 = Game(team1=arg, team2=bra)
+        self.game6 = Game(team1=arg, team2=chi)
+        self.game7 = Game(team1=uru, team2=bra)
+        self.game8 = Game(team1=uru, team2=arg)
+        self.game9 = Game(team1=uru, team2=chi)
+
         db.session.add(self.game1)
         db.session.add(self.game2)
         db.session.add(self.game3)
+        db.session.add(self.game4)
+        db.session.add(self.game5)
+        db.session.add(self.game6)
+        db.session.add(self.game7)
+        db.session.add(self.game8)
 
         db.session.commit()
 
@@ -262,4 +275,66 @@ class UpdateRankingTest(TestCase):
         ranking = User.ranking()
         self.assertEqual(user2.id, ranking[0].id)
         self.assertEqual(user1.id, ranking[1].id)
+
+
+    def test_update_ranking_criterias(self):
+
+        user = User(name="User", email="user@email.co", active=True)
+        db.session.add(user)
+
+        self.game1.score_team1 = 2
+        self.game1.score_team2 = 0
+
+        self.game2.score_team1 = 2
+        self.game2.score_team2 = 2
+
+        self.game3.score_team1 = 2
+        self.game3.score_team2 = 0
+
+        self.game4.score_team1 = 2
+        self.game4.score_team2 = 0
+
+        self.game5.score_team1 = 2
+        self.game5.score_team2 = 0
+
+        self.game6.score_team1 = 2
+        self.game6.score_team2 = 0
+
+        self.game7.score_team1 = 2
+        self.game7.score_team2 = 2
+
+        self.game8.score_team1 = 2
+        self.game8.score_team2 = 2
+
+        # exact (+game result, winner and loser goals)
+        bet1 = BetGame(user=user, game=self.game1, score_team1=2, score_team2=0, score=18)
+        # game result
+        bet2 = BetGame(user=user, game=self.game2, score_team1=1, score_team2=1, score=9)
+        bet3 = BetGame(user=user, game=self.game3, score_team1=3, score_team2=1, score=9)
+        # game result and winner goal
+        bet4 = BetGame(user=user, game=self.game4, score_team1=2, score_team2=1, score=12)
+        # game result and loser goal
+        bet5 = BetGame(user=user, game=self.game5, score_team1=3, score_team2=0, score=12)
+        # winner goal
+        bet6 = BetGame(user=user, game=self.game6, score_team1=2, score_team2=0, score=3)
+        # looser goal
+        bet7 = BetGame(user=user, game=self.game7, score_team1=0, score_team2=2, score=3)
+        # none
+        bet8 = BetGame(user=user, game=self.game8, score_team1=0, score_team2=2, score=0)
+
+        db.session.add(bet1)
+        db.session.add(bet2)
+        db.session.add(bet3)
+        db.session.add(bet4)
+        db.session.add(bet5)
+        db.session.add(bet6)
+        db.session.add(bet7)
+        db.session.add(bet8)
+        db.session.commit()
+
+        update_ranking_criterias(user)
+        self.assertEqual(1, user.crit_exact)
+        self.assertEqual(5, user.crit_game_result)
+        self.assertEqual(3, user.crit_win_goals)
+        self.assertEqual(3, user.crit_lose_goals)
 

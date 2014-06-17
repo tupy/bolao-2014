@@ -2,7 +2,6 @@
 
 from datetime import datetime
 
-from sqlalchemy import desc
 from flask.ext.login import UserMixin
 from bolao.database import db
 
@@ -17,6 +16,10 @@ class User(db.Model, UserMixin):
     admin = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime(), default=datetime.now)
     score_games = db.Column(db.Integer, default=0)
+    crit_exact = db.Column(db.Integer, default=0)
+    crit_game_result = db.Column(db.Integer, default=0)
+    crit_win_goals = db.Column(db.Integer, default=0)
+    crit_lose_goals = db.Column(db.Integer, default=0)
     games = db.relationship("BetGame", backref="user")
     bet_champions = db.relationship("BetChampions", uselist=False, backref="user")
     bet_scorer = db.relationship("BetScorer", uselist=False, backref="user")
@@ -29,7 +32,7 @@ class User(db.Model, UserMixin):
 
     @classmethod
     def ranking(self):
-        return User.query.filter_by(active=True).order_by(desc(User.score_games))
+        return User.query.filter_by(active=True).order_by(User.score_games.desc(), User.crit_exact.desc(), User.crit_game_result.desc(), User.crit_win_goals.desc(), User.crit_lose_goals.desc())
 
     def __repr__(self):
         return self.name

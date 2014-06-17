@@ -18,6 +18,31 @@
 <h1>{{profile.name}}</h1>
 <h2>{{profile.score_games + (profile.bet_champions.score or 0) + (profile.bet_scorer.score or 0)}} pontos</h2>
 
+<table class="table">
+<thead>
+  <tr>
+    <th>Critérios de desempate</th>
+    <th width=50>&nbsp;</th>
+  </tr>
+</thead>
+  <tr>
+    <td>Placares exatos</td>
+    <td>{{profile.crit_exact}}</td>
+  </tr>
+  <tr>
+    <td>Vitórias e/ou empates</td>
+    <td>{{profile.crit_game_result}}</td>
+  </tr>
+  <tr>
+    <td>Gols do vencedor</td>
+    <td>{{profile.crit_win_goals}}</td>
+  </tr>
+  <tr>
+    <td>Gols do perdedor</td>
+    <td>{{profile.crit_lose_goals}}</td>
+  </tr>
+</table>
+
 {% include "profile_champions.html" %}
 {% include "profile_scorer.html" %}
 

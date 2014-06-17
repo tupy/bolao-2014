@@ -36,7 +36,7 @@ class UserView(ModelView):
         form_class.password2 = PasswordField('New Password')
         return form_class
 
-    def on_model_change(self, form, model):
+    def on_model_change(self, form, model, is_created):
         if len(model.password2):
             model.password = generate_password_hash(form.password2.data)
 
