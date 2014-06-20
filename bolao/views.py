@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
 from flask import render_template, request, redirect, url_for, g
 from flask.ext.login import login_user, logout_user, login_required
-from collections import OrderedDict
+from collections import OrderedDict, Counter
 
 from bolao.database import db
 from bolao.models import User, Team, Game, Scorer
@@ -47,7 +47,13 @@ def ranking():
 @app.route('/estatistica')
 def statistics():
     games = Game.query.order_by(Game.time).all()
+    return render_template("statistics.html",
+        games=games,
+        game_stats=__game_stats(),
+        scorer_stats=__scorer_stats())
 
+
+def __game_stats():
     from sqlalchemy import select
     query = select([
       BetGame.game_id,
@@ -56,9 +62,18 @@ def statistics():
       func.count(func.IF(BetGame.score_team1<BetGame.score_team2,1,None)).label("team2"),
     ], group_by=BetGame.game_id).alias("game_stats")
 
-    game_stats = db.session.query(query).all()
-    game_stats = {x.game_id:x for x in game_stats}
-    return render_template("statistics.html", games=games, game_stats=game_stats)
+    result = db.session.query(query).all()
+    return {x.game_id:x for x in result}
+
+
+def __scorer_stats():
+    bets = BetScorer.query.all()
+    rank = Counter()
+    for bet in bets:
+        rank[bet.scorer1_id] += 1
+        rank[bet.scorer2_id] += 1
+    total_bets = len(bets) * 2  # two bets by record
+    return sorted([((100.0*rank[scorer.id])/total_bets, scorer) for scorer in Scorer.query.all()], reverse=True)
 
 
 @app.route('/jogos')

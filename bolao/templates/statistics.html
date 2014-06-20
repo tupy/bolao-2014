@@ -3,7 +3,30 @@
 
 {% set title = "Estatística" %}
 
+
+{% macro flag(team, width=30) -%}
+<img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%team.alias)}}" width="{{width}}" title="{{team.name}}">
+{%- endmacro %}
+
+{% macro top_scorer(k=10) %}
+<table class="table">
+<thead>
+  <tr>
+    <th colspan=2>Top-{{k}} Artilheiros</th>
+</tr>
+{% for total, scorer in scorer_stats[:k] %}
+  <tr>
+    <td>{{flag(scorer.team, 20)}} {{scorer.name}}</td>
+    <td class="text-right">{{total|int}}%</td>
+  </tr>
+{% endfor %}
+</table>
+{% endmacro %}
+
+
 {% block content %}
+
+{{ top_scorer(k=10)}}
 
 <table class="table">
 <thead>
@@ -16,9 +39,9 @@
 {% for game in games if game.id in game_stats %}
 {% set total = game_stats[game.id].team1 + game_stats[game.id].draw + game_stats[game.id].team2 %}
 <tr>
-  <td class="text-right">{{(100*game_stats[game.id].team1/total)|int}}%<img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team1.alias)}}" width="30" title="{{game.team1.name}}"></td>
-  <td class="text-center">{{(100*game_stats[game.id].draw/total)|int}}%</td>
-  <td><img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team2.alias)}}" width="30" title="{{game.team2.name}}">{{(100*game_stats[game.id].team2/total)|int}}%</td>
+  <td class="text-right">{{(100.0*game_stats[game.id].team1/total)|int}}%{{flag(game.team1)}}</td>
+  <td class="text-center">{{(100.0*game_stats[game.id].draw/total)|int}}%</td>
+  <td>{{flag(game.team2)}}{{(100.0*game_stats[game.id].team2/total)|int}}%</td>
 </tr>
 {% endfor %}
 </table>
