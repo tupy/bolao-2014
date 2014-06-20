@@ -10,7 +10,7 @@
 {% if bet %}
 <input type="hidden" name="bet_id" value="{{bet.id}}" />
 {% endif %}
-<h4>Grupo {{game.group}}</h4>
+<h4>{{'Grupo %s' % game.group if game.group else game.label}}</h4>
 <table class="table table-noborder bet-game">
   <tr>
     <td>

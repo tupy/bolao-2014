@@ -13,7 +13,7 @@
   <th></th>
 </tr>
 </thead>
-{% for game in games %}
+{% for game in games if game.id in game_stats %}
 {% set total = game_stats[game.id].team1 + game_stats[game.id].draw + game_stats[game.id].team2 %}
 <tr>
   <td class="text-right">{{(100*game_stats[game.id].team1/total)|int}}%<img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team1.alias)}}" width="30" title="{{game.team1.name}}"></td>

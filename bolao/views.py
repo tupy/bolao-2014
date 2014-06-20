@@ -71,6 +71,8 @@ def games():
         today = datetime.now().date()
         limit = 6 if today < date(2014, 06, 22) else 8
         games = Game.query.filter(Game.time>=today).order_by(Game.time).limit(limit).all()
+    # drop undefined games
+    games = filter(lambda x: x.team1 and x.team2, games)
     games_by_day = __group_by_day(games)
     bets = BetGame.query.filter_by(user=g.user)
     bets = {bet.game_id:bet for bet in bets}

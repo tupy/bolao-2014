@@ -51,6 +51,6 @@ class GameView(ModelView):
     column_default_sort = 'time'
 
     def on_model_change(self, form, model, is_created):
-        if not is_created:
+        if not is_created and model.score_team1 is not None:
             update_scores_by_game(model)
             update_ranking()
