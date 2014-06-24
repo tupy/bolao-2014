@@ -15,12 +15,12 @@
     {% if game.id in bets -%}
       {% set bet = bets[game.id] -%}
       {% if now() < game.time + config.BOLAO_BET_GAME_LIMIT %}
-      <small><a href="{{url_for('.bet_game_view', game_id=game.id)}}">{{bet.score_team1}} x {{bet.score_team2}}</a></small>
+      <small><a href="{{url_for('.bet_game_view', game_id=game.id, show=request.args.show)}}">{{bet.score_team1}} x {{bet.score_team2}}</a></small>
       {% else %}
       <small>{{bet.score_team1}} x {{bet.score_team2}}</small>
       {% endif %}
     {%- elif now() < game.time + config.BOLAO_BET_GAME_LIMIT %}
-      <small><a href="{{url_for('.bet_game_view', game_id=game.id)}}">apostar</a></small>
+      <small><a href="{{url_for('.bet_game_view', game_id=game.id, show=request.args.show)}}">apostar</a></small>
     {%- else  %}
       <small>expirou</small>
     {%- endif %}
@@ -33,5 +33,9 @@
 {% endfor %}
 </table>
 {% endfor %}
+
+{% if request.args.get('show') != 'all' %}
+<a href="{{url_for('.games', show='all')}}" class="btn btn-default btn-block">Exibir todos os jogos</a>
+{% endif %}
 
 {% endblock %}

@@ -2,9 +2,10 @@
 
 import flask
 
+from datetime import datetime, date
+
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
-from datetime import datetime
 from flask import render_template, request, redirect, url_for, g
 from flask.ext.login import login_user, logout_user, login_required
 from collections import OrderedDict
@@ -62,7 +63,13 @@ def statistics():
 @app.route('/jogos')
 @login_required
 def games():
-    games = Game.query.order_by(Game.time)
+    show = request.args.get('show')
+    if show == 'all':
+        games = Game.query.order_by(Game.time)
+    else:
+        today = datetime.now().date()
+        limit = 6 if today < date(2014, 06, 22) else 8
+        games = Game.query.filter(Game.time>=today).order_by(Game.time).limit(limit)
     games_by_day = __group_by_day(games)
     bets = BetGame.query.filter_by(user=g.user)
     bets = {bet.game_id:bet for bet in bets}
@@ -125,7 +132,8 @@ def bet_game():
     bet.score_team1 = int(request.form.get('score_team1') or 0)
     bet.score_team2 = int(request.form.get('score_team2') or 0)
     db.session.commit()
-    return redirect(url_for('.games', _anchor='game-%s' % game_id))
+
+    return redirect(url_for('.games', show=request.form.get('show'), _anchor='game-%s' % game_id))
 
 
 @app.route('/campeoes', methods=['GET', 'POST'])

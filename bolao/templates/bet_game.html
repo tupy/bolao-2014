@@ -5,6 +5,7 @@
 {% block content %}
 
 <form action="{{url_for('.bet_game')}}" method="post">
+<input type="hidden" name="show" value="{{request.args.show}}" />
 <input type="hidden" name="game_id" value="{{game.id}}" />
 {% if bet %}
 <input type="hidden" name="bet_id" value="{{bet.id}}" />
