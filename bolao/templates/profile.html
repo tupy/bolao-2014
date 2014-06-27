@@ -14,6 +14,15 @@
   color: #999;
   font-size: 1.5em;
 }
+.bet_time {
+  text-align: center;
+  font-size: 10px;
+  color: #999;
+}
+tbody > tr.bet_time > td {
+  border-top: none;
+  padding-top: 0;
+}
 </style>
 {% endblock %}
 
@@ -66,6 +75,10 @@
       </td>
       <td><img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%game.team2.alias)}}" width="30" height="30" alt="{{game.team2}}" /></td>
       <td>{{bet.score}}</td>
+    </tr>
+    <tr class="bet_time">
+      {% set bet_time = bet.updated_at or bet.created_at %}
+      <td colspan=4>Aposta feita às {{bet_time.strftime('%Hh%M de %d/%m/%Y').decode('utf-8')}}</td>
     </tr>
   {% endfor %}
   <tr class="total">
