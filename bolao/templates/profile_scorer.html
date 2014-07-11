@@ -1,11 +1,9 @@
 
 {% macro scorer_row(scorer, pts=0) %}
 <tr>
-  <td><img src="" /></td>
   <td>
-    <strong>{{scorer.name}}</strong><br />
     <img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%scorer.team.alias)}}" width="22" height="22" />
-    <span class="text-muted">{{scorer.team.name}}</span>
+    {{scorer.name}}
   </td>
   <td>{{pts}}</td>
 </tr>
@@ -16,7 +14,7 @@
   {% set bet = profile.bet_scorer %}
     <table class="table scorer">
       <thead>
-        <th colspan=2>Artilheiros</th>
+        <th>Artilheiros</th>
         <th width=50>pts</th>
       </thead>
       {{scorer_row(bet.scorer1)}}
