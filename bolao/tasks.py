@@ -1,14 +1,55 @@
 
 from collections import Counter
 from sqlalchemy import func, select, and_, or_
+from sqlalchemy.orm.session import make_transient
 
 from bolao.database import db
-from bolao.models import BetGame, User
+from bolao.models import Scorer, BetGame, BetScorer, User
 
 EXACT_RESULT = 18
 RESULT_AND_A_SCORE = 12
 ONLY_RESULT = 9
 ONLY_ONE_SCORE = 3
+SCORER_POINTS = 20
+
+
+def update_scorer(scorer):
+
+    # detach from the session to load the database instance to compare
+    scorer_id = scorer.id
+    make_transient(scorer)
+    scorer.id = scorer_id
+    scorer_db = Scorer.query.get(scorer_id)
+    if scorer_db.scorer == scorer.scorer:
+        return
+    # reattach the instance
+    scorer = db.session.merge(scorer)
+
+    bets = BetScorer.query.filter(or_(BetScorer.scorer1==scorer, BetScorer.scorer2==scorer))
+
+    for bet in bets:
+        if not scorer.scorer and bet.score == 0:
+            continue
+        if scorer.scorer:
+            bet.score += SCORER_POINTS
+        else:
+            bet.score -= SCORER_POINTS
+
+        # pass as param since the user.bet_scorer backref is None here
+        update_total_score(bet.user, bet_scorer=bet)
+
+    db.session.commit()
+
+
+def update_total_score(user, bet_scorer=None, bet_champions=None):
+    user.score_total = user.score_games
+    bet_scorer = bet_scorer or user.bet_scorer
+    if bet_scorer:
+        user.score_total += bet_scorer.score
+    bet_champions = bet_champions or user.bet_champions
+    if bet_champions:
+        user.score_total += bet_champions.score
+    return user.score_total
 
 
 def update_scores_by_game(game):
@@ -36,9 +77,12 @@ def update_ranking():
     for user in User.ranking():
         user.score_games = db.session.query(func.sum(BetGame.score)).filter_by(user=user).scalar() or 0
         update_ranking_criterias(user)
+        update_total_score(user)
     db.session.commit()
 
-    # update ranking position
+
+def update_positions():
+    """Update ranking positions."""
     for pos, user in enumerate(User.ranking()):
         user.last_pos = user.pos
         user.pos = pos + 1

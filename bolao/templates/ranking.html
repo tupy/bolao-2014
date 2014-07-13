@@ -20,7 +20,7 @@
   {% for user in users %}
   <tr{{' class=top10' if loop.index <= 10 else ' class=bot10' if loop.index > loop.length-9 }}>
     <td{{' class=active' if current_user.id == user.id}}>{{loop.index}} &nbsp; <a href="{{url_for('.profile', id=user.id)}}">{{user.name}}{{' (You)' if current_user.id == user.id}}</a>{{diff(user)}}</td>
-    <td>{{user.score_games}}</td>
+    <td>{{user.score_total}}</td>
   </tr>
   {% endfor %}
 </table>

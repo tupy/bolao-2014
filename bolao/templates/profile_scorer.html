@@ -1,11 +1,11 @@
 
-{% macro scorer_row(scorer, pts=0) %}
+{% macro scorer_row(scorer) %}
 <tr>
   <td>
     <img class="flag" src="{{url_for('static', filename='images/flags/%s.png'%scorer.team.alias)}}" width="22" height="22" />
     {{scorer.name}}
   </td>
-  <td>{{pts}}</td>
+  <td>{{20 if scorer.scorer else 0}}</td>
 </tr>
 {% endmacro %}
 
@@ -19,6 +19,10 @@
       </thead>
       {{scorer_row(bet.scorer1)}}
       {{scorer_row(bet.scorer2)}}
+      <tr class="total">
+        <td>Total ({{((100*bet.score)/(40))|round(2)}}%)</td>
+        <td>{{bet.score}}</td>
+      </tr>
     </table>
     {% if profile.id == current_user.id and now() < config.BOLAO_BET_SCORER_LIMIT %}
       <a href="{{url_for('.bet_scorer')}}" class="btn btn-default btn-xs btn-block">Editar</a>

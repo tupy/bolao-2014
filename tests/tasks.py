@@ -2,9 +2,10 @@
 
 from flask.ext.testing import TestCase
 
-from bolao.models import Team, User, Game, BetGame
+from bolao.models import Team, User, Game, Scorer, BetScorer, BetGame
 from bolao.main import app_factory
-from bolao.tasks import update_scores_by_game, update_ranking, update_ranking_criterias
+from bolao.tasks import (update_scores_by_game, update_ranking, update_ranking_criterias,
+    update_scorer)
 from bolao.database import db
 
 
@@ -338,3 +339,120 @@ class UpdateRankingTest(TestCase):
         self.assertEqual(3, user.crit_win_goals)
         self.assertEqual(3, user.crit_lose_goals)
 
+
+class UpdateScorerTest(TestCase):
+
+    def create_app(self):
+        app = app_factory('Testing')
+        return app
+
+    def setUp(self):
+        db.create_all()
+
+        user = User(name="Test", email="email@test.co", active=True)
+        db.session.add(user)
+
+        bra = Team(name='Brasil', alias='BRA')
+        arg = Team(name='Argentina', alias='ARG')
+        db.session.add(bra)
+        db.session.add(arg)
+
+        fred = Scorer(name="Fred", team=bra)
+        neymar = Scorer(name="Neymar", team=bra)
+        messi = Scorer(name="Messi", team=arg)
+
+        db.session.add(fred)
+        db.session.add(neymar)
+        db.session.add(messi)
+
+        db.session.commit()
+
+        self.user = user
+        self.fred = fred
+        self.neymar = neymar
+        self.messi = messi
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+
+    def test_scorer1(self):
+
+        bet = BetScorer(scorer1=self.fred, scorer2=self.neymar, user=self.user)
+        db.session.add(bet)
+        db.session.commit()
+
+        self.fred.scorer = True
+        update_scorer(self.fred)
+        self.assertEqual(20, bet.score)
+        self.assertEqual(20, self.user.score_total)
+
+    def test_scorer2(self):
+
+        bet = BetScorer(scorer1=self.fred, scorer2=self.neymar, user=self.user)
+        db.session.add(bet)
+        db.session.commit()
+
+        self.neymar.scorer = True
+        update_scorer(self.neymar)
+        self.assertEqual(20, bet.score)
+        self.assertEqual(20, self.user.score_total)
+
+    def test_scorer1_and_scorer2(self):
+
+        bet = BetScorer(scorer1=self.fred, scorer2=self.neymar, user=self.user)
+        db.session.add(bet)
+        db.session.commit()
+
+        self.fred.scorer = True
+        update_scorer(self.fred)
+        self.neymar.scorer = True
+        update_scorer(self.neymar)
+        self.assertEqual(40, bet.score)
+        self.assertEqual(40, self.user.score_total)
+
+    def test_remove_scorer(self):
+        self.fred.scorer = True
+        self.neymar.scorer = True
+        bet = BetScorer(scorer1=self.fred, scorer2=self.neymar, user=self.user)
+        bet.score = 40
+        db.session.add(bet)
+        db.session.commit()
+
+        self.fred.scorer = False
+        update_scorer(self.fred)
+        self.assertEqual(20, bet.score)
+        self.assertEqual(20, self.user.score_total)
+
+        self.neymar.scorer = False
+        update_scorer(self.neymar)
+        self.assertEqual(0, bet.score)
+        self.assertEqual(0, self.user.score_total)
+
+    def test_remove_no_scorer(self):
+        self.fred.scorer = True
+        self.neymar.scorer = True
+        bet = BetScorer(scorer1=self.fred, scorer2=self.neymar, user=self.user)
+        bet.score = 40
+        self.user.score_total = 40
+        db.session.add(bet)
+        db.session.commit()
+
+        self.messi.scorer = True
+        update_scorer(self.messi)
+        self.assertEqual(40, bet.score)
+        self.assertEqual(40, self.user.score_total)
+
+    def test_no_changes(self):
+        self.fred.scorer = False
+        self.neymar.scorer = True
+        bet = BetScorer(scorer1=self.fred, scorer2=self.neymar, user=self.user)
+        bet.score = 20
+        self.user.score_total = 20
+        db.session.add(bet)
+        db.session.commit()
+
+        self.fred.scorer = False
+        update_scorer(self.fred)
+        self.assertEqual(20, bet.score)
+        self.assertEqual(20, self.user.score_total)

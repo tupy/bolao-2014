@@ -18,6 +18,7 @@ class User(db.Model, UserMixin):
     last_pos = db.Column(db.Integer)
     pos = db.Column(db.Integer)
     score_games = db.Column(db.Integer, default=0)
+    score_total = db.Column(db.Integer, default=0)
     crit_exact = db.Column(db.Integer, default=0)
     crit_game_result = db.Column(db.Integer, default=0)
     crit_win_goals = db.Column(db.Integer, default=0)
@@ -34,7 +35,7 @@ class User(db.Model, UserMixin):
 
     @classmethod
     def ranking(self):
-        return User.query.filter_by(active=True).order_by(User.score_games.desc(), User.crit_exact.desc(), User.crit_game_result.desc(), User.crit_win_goals.desc(), User.crit_lose_goals.desc())
+        return User.query.filter_by(active=True).order_by(User.score_total.desc(), User.crit_exact.desc(), User.crit_game_result.desc(), User.crit_win_goals.desc(), User.crit_lose_goals.desc())
 
     def __repr__(self):
         return self.name
@@ -55,6 +56,7 @@ class Scorer(db.Model):
     image = db.Column(db.String(150))
     team_id = db.Column(db.Integer, db.ForeignKey('team.id'))
     team = db.relationship('Team')
+    scorer = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return self.name
