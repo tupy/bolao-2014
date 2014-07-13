@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 
+import flask
+
+from flask import request, redirect, url_for
 from flask.ext.admin import BaseView, AdminIndexView, expose
 from flask.ext.admin.contrib.sqla import ModelView as SQLAModelView
 from flask.ext import login
-
 from wtforms import PasswordField
+
 from bolao.utils import generate_password_hash
-from bolao.tasks import update_scores_by_game, update_ranking, update_positions, update_scorer
+from bolao.tasks import (update_scores_by_game, update_ranking, update_positions,
+    update_scorer, update_champions)
 from bolao.models import Scorer, Team
 
 
@@ -64,3 +68,27 @@ class ScorerView(ModelView):
         if not is_created:
             update_scorer(model)
             update_positions()
+
+
+class ChampionsView(BaseView):
+
+    @expose('/')
+    def index(self):
+        teams = Team.query.order_by(Team.name)
+        first = Team.query.filter_by(position=1).first()
+        second = Team.query.filter_by(position=2).first()
+        third = Team.query.filter_by(position=3).first()
+        fourth = Team.query.filter_by(position=4).first()
+        return self.render('admin/champions.html', teams=teams, first=first, second=second, third=third, fourth=fourth)
+
+    @expose('/save', methods=['POST'])
+    def save(self):
+
+        load = lambda x: Team.query.get(request.form.get(x, -1))
+        try:
+            update_champions(load('first'), load('second'), load('third'), load('fourth'))
+            update_positions()
+            flask.flash("The champions was updated successfully", category='success')
+        except AssertionError:
+            flask.flash("You need to choose all four teams", category='error')
+        return redirect(url_for('.index'))

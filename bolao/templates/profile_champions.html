@@ -1,5 +1,5 @@
 
-{% macro row_champion(team, position, pts=0) %}
+{% macro row_champion(team, position) %}
 <tr>
   <td>
   <strong>{{position}}&ordm;</strong>
@@ -9,7 +9,11 @@
 &nbsp;&nbsp;<small>Não escolhido</small>
 {% endif %}
   </td>
-  <td>{{pts}}</td>
+  {% if team.position %}
+  <td>{{10 if team.position == position else 5}}</td>
+  {% else %}
+  <td>0</td>
+  {% endif %}
 </tr>
 {% endmacro %}
 
@@ -25,6 +29,10 @@
       {{row_champion(bet.second, 2)}}
       {{row_champion(bet.third, 3)}}
       {{row_champion(bet.fourth, 4)}}
+       <tr class="total">
+        <td>Total ({{((100*bet.score)/(40))|round(2)}}%)</td>
+        <td>{{bet.score}}</td>
+      </tr>
     </table>
     {% if profile.id == current_user.id and now() < config.BOLAO_BET_CHAMPIONS_LIMIT %}
       <a href="{{url_for('.bet_champions', edit='edit')}}" class="btn btn-default btn-xs btn-block">Editar</a>

@@ -45,6 +45,7 @@ class Team(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     alias = db.Column(db.String(3), unique=True)
     name = db.Column(db.String(80))
+    position = db.Column(db.Integer)
 
     def __repr__(self):
         return self.name
@@ -107,6 +108,10 @@ class BetChampions(db.Model):
     created_at = db.Column(db.DateTime(), default=datetime.now)
     updated_at = db.Column(db.DateTime())
     score = db.Column(db.Integer, default=0)
+
+
+    def __repr__(self):
+        return "1-{0} 2-{1} 3-{2} 4-{3}".format(self.first, self.second, self.third, self.fourth)
 
 
 class BetScorer(db.Model):

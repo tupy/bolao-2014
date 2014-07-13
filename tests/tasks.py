@@ -2,10 +2,10 @@
 
 from flask.ext.testing import TestCase
 
-from bolao.models import Team, User, Game, Scorer, BetScorer, BetGame
+from bolao.models import Team, User, Game, Scorer, BetScorer, BetGame, BetChampions
 from bolao.main import app_factory
 from bolao.tasks import (update_scores_by_game, update_ranking, update_ranking_criterias,
-    update_scorer)
+    update_scorer, update_champions)
 from bolao.database import db
 
 
@@ -456,3 +456,102 @@ class UpdateScorerTest(TestCase):
         update_scorer(self.fred)
         self.assertEqual(20, bet.score)
         self.assertEqual(20, self.user.score_total)
+
+
+class UpdateChampionsTest(TestCase):
+
+    def create_app(self):
+        app = app_factory('Testing')
+        return app
+
+    def setUp(self):
+        db.create_all()
+
+        user = User(name="Test", email="email@test.co", active=True)
+        db.session.add(user)
+
+        bra = Team(name='Brasil', alias='BRA')
+        arg = Team(name='Argentina', alias='ARG')
+        uru = Team(name='Uruguai', alias='URU')
+        ale = Team(name='Alemanha', alias='ALE')
+        usa = Team(name='Estados Unidos', alias='USA')
+        db.session.add(bra)
+        db.session.add(arg)
+        db.session.add(uru)
+        db.session.add(ale)
+        db.session.add(usa)
+
+        db.session.commit()
+
+        self.user = user
+        self.bra = bra
+        self.arg = arg
+        self.uru = uru
+        self.ale = ale
+        self.usa = usa
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+
+    def test_exact_positions(self):
+
+        bet = BetChampions(first=self.bra, second=self.arg, third=self.ale, fourth=self.uru, user=self.user)
+        db.session.add(bet)
+        db.session.commit()
+
+        update_champions(self.bra, self.arg, self.ale, self.uru)
+
+        self.assertEqual(40, bet.score)
+        self.assertEqual(40, self.user.score_total)
+
+    def test_only_positions(self):
+
+        bet = BetChampions(first=self.bra, second=self.arg, third=self.ale, fourth=self.uru, user=self.user)
+        db.session.add(bet)
+        db.session.commit()
+
+        update_champions(self.uru, self.ale, self.arg, self.bra)
+
+        self.assertEqual(20, bet.score)
+        self.assertEqual(20, self.user.score_total)
+
+    def test_mixed_positions(self):
+
+        bet = BetChampions(first=self.ale, second=self.arg, third=self.bra, fourth=self.uru, user=self.user)
+        db.session.add(bet)
+        db.session.commit()
+
+        update_champions(self.bra, self.usa, self.arg, self.uru)
+
+        self.assertEqual(20, bet.score)
+        self.assertEqual(20, self.user.score_total)
+
+    def test_any_position(self):
+
+        t1 = Team(name="T1", alias="T1")
+        t2 = Team(name="T2", alias="T2")
+        t3 = Team(name="T3", alias="T3")
+        t4 = Team(name="T4", alias="T4")
+
+        db.session.add(t1)
+        db.session.add(t2)
+        db.session.add(t3)
+        db.session.add(t4)
+
+        bet = BetChampions(first=self.bra, second=self.arg, third=self.ale, fourth=self.uru, user=self.user)
+        db.session.add(bet)
+        db.session.commit()
+
+        update_champions(t1, t2, t3, t4)
+
+        self.assertEqual(0, bet.score)
+
+
+    def test_raises_with_none(self):
+        bet = BetChampions(first=self.bra, second=self.arg, third=self.ale, fourth=self.uru, user=self.user)
+        db.session.add(bet)
+        db.session.commit()
+
+        self.assertRaises(AssertionError, update_champions, None, None, None, None)
+

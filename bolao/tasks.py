@@ -4,13 +4,15 @@ from sqlalchemy import func, select, and_, or_
 from sqlalchemy.orm.session import make_transient
 
 from bolao.database import db
-from bolao.models import Scorer, BetGame, BetScorer, User
+from bolao.models import User, Team, Scorer, BetGame, BetScorer, BetChampions
 
 EXACT_RESULT = 18
 RESULT_AND_A_SCORE = 12
 ONLY_RESULT = 9
 ONLY_ONE_SCORE = 3
 SCORER_POINTS = 20
+EXACT_CHAMPIONS = 10
+CHAMPIONS_POINTS = 5
 
 
 def update_scorer(scorer):
@@ -38,6 +40,40 @@ def update_scorer(scorer):
         # pass as param since the user.bet_scorer backref is None here
         update_total_score(bet.user, bet_scorer=bet)
 
+    db.session.commit()
+
+
+def update_champions(first, second, third, fourth):
+
+    assert None not in (first, second, third, fourth)
+
+    # reset all
+    BetChampions.query.update({'score': 0})
+    Team.query.update({'position': 0})
+
+    first.position = 1
+    second.position = 2
+    third.position = 3
+    fourth.position = 4
+
+    rank = (first.id, second.id, third.id, fourth.id)
+    bets = BetChampions.query.filter(or_(
+      BetChampions.first_id.in_(rank),
+      BetChampions.second_id.in_(rank),
+      BetChampions.third_id.in_(rank),
+      BetChampions.fourth_id.in_(rank))).all()
+
+    def update_pos(arg):
+      bet_team, team = arg[0], arg[1]
+      if bet_team.id in rank:
+        return EXACT_CHAMPIONS if bet_team == team else CHAMPIONS_POINTS
+      return 0
+
+    def update_all(bet):
+        bet.score = sum(map(update_pos, [(bet.first, first), (bet.second, second), (bet.third, third), (bet.fourth, fourth)]))
+        update_total_score(bet.user, bet_champions=bet)
+
+    map(update_all, bets)
     db.session.commit()
 
 
