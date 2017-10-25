@@ -17,7 +17,7 @@ from bolao.models import Scorer, Team
 class OnlyAdmin(BaseView):
 
     def is_accessible(self):
-        return login.current_user.is_authenticated() and login.current_user.is_admin()
+        return login.current_user.is_authenticated and login.current_user.is_admin
 
 
 class IndexView(AdminIndexView, OnlyAdmin):

@@ -4,8 +4,7 @@ import os
 import json
 import datetime
 
-from flask.ext import script
-from flask.ext.script import Command
+from flask_script import Manager, Command
 
 from bolao.database import create_all, drop_all
 
@@ -78,7 +77,7 @@ class DropDB(Command):
 if __name__ == "__main__":
     from bolao.main import app_factory
 
-    manager = script.Manager(app_factory)
+    manager = Manager(app_factory)
     manager.add_option("-c", "--config", dest="config", required=False, default='Dev')
     manager.add_command("create_db", CreateDB())
     manager.add_command("drop_db", DropDB())

@@ -41,10 +41,10 @@
   </div>
   <nav id="menu-left">
     <ul>
-      {% if current_user.is_anonymous() %}
+      {% if current_user.is_anonymous %}
       <li><a href="{{url_for('.login')}}">Entrar</a></li>
       {% endif %}
-      {% if current_user.is_authenticated() %}
+      {% if current_user.is_authenticated %}
       <li{{' class=mm-selected' if '.index' in request.endpoint}}><a href="{{url_for('.index')}}">{{current_user.name}}</a>
         <ul>
           <li{{' class=mm-selected' if '.games' in request.endpoint}}><a href="{{url_for('.games')}}">Jogos</a></li>
@@ -57,7 +57,7 @@
       {% endif %}
       <li{{' class=mm-selected' if '.comofunciona' in request.endpoint}}><a href="{{url_for('.comofunciona')}}">Como funciona</a></li>
       <li{{' class=mm-selected' if '.sobre' in request.endpoint}}><a href="{{url_for('.sobre')}}">Sobre</a></li>
-      {% if current_user.is_authenticated() %}
+      {% if current_user.is_authenticated %}
       <li><a href="{{url_for('.logout')}}">Logout</a></li>
       {% endif %}
     </ul>

@@ -24,7 +24,7 @@ WELCOME_MESSAGE = u'Bem-vindo ao Bolão RIACHAO.COM. Aguarde instruções por e-
 
 @app.route('/')
 def index():
-    if g.user.is_anonymous():
+    if g.user.is_anonymous:
         return redirect(url_for('.login'))
     return profile(g.user.id)
 
@@ -227,7 +227,7 @@ def add_scorer():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if g.user.is_authenticated():
+    if g.user.is_authenticated:
         return redirect('/')
 
     form = LoginForm()
@@ -247,7 +247,7 @@ def login():
 
 @app.route("/logout")
 def logout():
-    if g.user.is_authenticated():
+    if g.user.is_authenticated:
         logout_user()
     return redirect('/')
 

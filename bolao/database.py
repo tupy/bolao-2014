@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import pymysql
+pymysql.install_as_MySQLdb()
 
 from flask.ext.sqlalchemy import SQLAlchemy
 db = SQLAlchemy()

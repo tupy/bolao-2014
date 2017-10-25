@@ -1,4 +1,4 @@
-Flask
+Flask==0.10.0
 Flask-Admin==1.0.8
 Flask-Login
 Flask-Mobility
@@ -6,4 +6,5 @@ flask-Script
 Flask-SQLAlchemy
 Flask-Testing
 Flask-WTF
-freezegun==0.1.18
+freezegun
+pymysql
