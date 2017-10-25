@@ -30,6 +30,7 @@ class User(db.Model, UserMixin):
     def is_admin(self):
         return self.admin
 
+    @property
     def is_active(self):
         return self.admin or self.active
 

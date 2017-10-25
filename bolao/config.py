@@ -64,6 +64,8 @@ class Testing(Config):
     CSRF_ENABLED = False
     SQLALCHEMY_DATABASE_URI = "sqlite://"
     SQLALCHEMY_ECHO = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    LOGIN_DISABLED = True
 
 
 class Production(Config):

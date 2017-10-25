@@ -111,7 +111,7 @@ def __is_game_expired(game):
 @app.route('/apostar_jogo/<int:game_id>')
 @login_required
 def bet_game_view(game_id):
-    if not g.user.is_active():
+    if not g.user.is_active:
         flask.flash(INACTIVE_USER_MESSAGE, category='warning')
         return redirect(url_for('.games'))
 
@@ -161,7 +161,7 @@ def bet_champions():
     if datetime.now() > flask.current_app.config['BOLAO_BET_CHAMPIONS_LIMIT']:
         flask.flash(u'O prazo para escolher as primeiras colocadas expirou.', category='warning')
         return redirect(url_for('.index'))
-    elif not g.user.is_active():
+    elif not g.user.is_active:
         flask.flash(INACTIVE_USER_MESSAGE, category='warning')
         return redirect(url_for('.index'))
 
@@ -192,7 +192,7 @@ def bet_scorer():
     if datetime.now() > flask.current_app.config['BOLAO_BET_SCORER_LIMIT']:
         flask.flash(u'O prazo para escolher os artilheiros expirou.', category='warning')
         return redirect(url_for('.index'))
-    elif not g.user.is_active():
+    elif not g.user.is_active:
         flask.flash(INACTIVE_USER_MESSAGE, category='warning')
         return redirect(url_for('.index'))
 
@@ -273,4 +273,3 @@ def signup():
 @app.route('/sobre', defaults={"template": 'sobre.html'}, endpoint='sobre')
 def page(template):
     return render_template(template)
-
