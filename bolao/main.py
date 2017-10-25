@@ -10,7 +10,10 @@ if platform.system() == 'Darwin':
 import os
 os.environ['TZ'] = __timezone__
 import locale
-locale.setlocale(locale.LC_ALL, __locale__)
+try:
+  locale.setlocale(locale.LC_ALL, __locale__)
+except e:
+  print "Locale %s not supported" % __locale__
 
 import flask
 

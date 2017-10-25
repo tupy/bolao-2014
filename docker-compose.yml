@@ -1,0 +1,18 @@
+version: '3'
+services:
+  web:
+    build: .
+    command: python manage.py runserver -h 0.0.0.0
+    ports:
+    - "5000:5000"
+    volumes:
+    - .:/usr/src/app
+    links:
+    - db
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+    - MYSQL_ROOT_PASSWORD=010203
+    ports:
+    - "3306:3306"

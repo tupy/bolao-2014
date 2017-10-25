@@ -57,6 +57,7 @@ class Dev(Config):
     DEBUG = True
     MAIL_DEBUG = True
     SQLALCHEMY_ECHO = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI', 'mysql://root:010203@db/bolao')
 
 
 class Testing(Config):
