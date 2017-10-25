@@ -18,7 +18,7 @@ class Config(object):
     USE_X_SENDFILE = False
 
     # DATABASE CONFIGURATION
-    SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/%s_dev.sqlite" % project_name
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI', "sqlite:////tmp/%s_dev.sqlite" % project_name)
     SQLALCHEMY_ECHO = False
 
     CSRF_ENABLED = True
@@ -57,7 +57,6 @@ class Dev(Config):
     DEBUG = True
     MAIL_DEBUG = True
     SQLALCHEMY_ECHO = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI', 'mysql://root:010203@db/bolao')
 
 
 class Testing(Config):
