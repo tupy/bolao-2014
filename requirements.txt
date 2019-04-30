@@ -1,10 +1,11 @@
 Flask==1.0.2
 Flask-Admin==1.5.3
-Flask-Login
+Flask-Login==0.4.1
 Flask-Mobility
 flask-Script
-Flask-SQLAlchemy
+Flask-SQLAlchemy==2.4.0
 Flask-Testing
 Flask-WTF
 freezegun
 pymysql
+enum==0.4.7

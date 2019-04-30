@@ -3,9 +3,9 @@
 import flask
 
 from flask import request, redirect, url_for
-from flask.ext.admin import BaseView, AdminIndexView, expose
-from flask.ext.admin.contrib.sqla import ModelView as SQLAModelView
-from flask.ext import login
+from flask_admin import BaseView, AdminIndexView, expose
+from flask_admin.contrib.sqla import ModelView as SQLAModelView
+from flask_login import current_user
 from wtforms import PasswordField
 
 from bolao.utils import generate_password_hash
@@ -17,7 +17,7 @@ from bolao.models import Scorer, Team
 class OnlyAdmin(BaseView):
 
     def is_accessible(self):
-        return login.current_user.is_authenticated and login.current_user.is_admin
+        return current_user.is_authenticated and current_user.is_admin
 
 
 class IndexView(AdminIndexView, OnlyAdmin):

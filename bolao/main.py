@@ -17,8 +17,8 @@ except e:
 
 import flask
 
-from flask.ext.admin import Admin
-from flask.ext.login import LoginManager
+from flask_admin import Admin
+from flask_login import LoginManager
 
 login_manager = LoginManager()
 
@@ -60,7 +60,7 @@ def configure_app(app, config):
 
 def configure_before_requests(app):
 
-    from flask.ext.login import current_user
+    from flask_login import current_user
 
     @app.before_request
     def before_request():

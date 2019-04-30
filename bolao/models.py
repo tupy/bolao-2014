@@ -2,7 +2,7 @@
 
 from datetime import datetime
 
-from flask.ext.login import UserMixin
+from flask_login import UserMixin
 from bolao.database import db
 
 

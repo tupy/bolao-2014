@@ -7,7 +7,7 @@ from datetime import datetime, date
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
 from flask import render_template, request, redirect, url_for, g
-from flask.ext.login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required
 from collections import OrderedDict, Counter
 
 from bolao.database import db
