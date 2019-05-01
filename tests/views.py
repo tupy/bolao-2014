@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from freezegun import freeze_time
 
 from flask import url_for
-from flask.ext.testing import TestCase as FlaskTestCase
+from flask_testing import TestCase as FlaskTestCase
 
 from bolao.main import app_factory
 from bolao.database import db

@@ -1,6 +1,6 @@
 
 
-from flask.ext.testing import TestCase
+from flask_testing import TestCase
 
 from bolao.models import Team, User, Game, Scorer, BetScorer, BetGame, BetChampions
 from bolao.main import app_factory
